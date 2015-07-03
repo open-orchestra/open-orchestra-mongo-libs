@@ -9,6 +9,9 @@
     }
   ],
   "minimum-stability": "dev",
+  "require": {
+    "symfony/http-foundation": "*"
+  },
   "require-dev": {
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",

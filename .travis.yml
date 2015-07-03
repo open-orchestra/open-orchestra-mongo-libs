@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.4
+
+sudo: false
+
+cache:
+  directories:
+    - ~/.composer/cache
+
+install:
+  - composer install --no-progress --prefer-dist
+
+script: ./bin/phpunit
