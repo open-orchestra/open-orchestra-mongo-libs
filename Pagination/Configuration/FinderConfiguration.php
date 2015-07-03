@@ -14,15 +14,38 @@ class FinderConfiguration
     protected $search = null;
 
     /**
+     * Construct
+     */
+    protected function __construct() {}
+
+    /**
+     * @param null|array  $descriptionEntity
+     * @param null|array  $columns
+     * @param null|string $search
+     *
+     * @return FinderConfiguration
+     */
+    public static function generateFromVariable($descriptionEntity = null, $columns = null, $search = null)
+    {
+        $finderConfig = new static();
+        if(static::isArrayOrNull($columns))
+            $finderConfig->setColumns($columns);
+        $finderConfig->setSearch($search);
+        $finderConfig->setDescriptionEntity($descriptionEntity);
+
+        return $finderConfig;
+    }
+
+    /**
      * @param Request $request
      *
      * @return FinderConfiguration
      */
     public static function generateFromRequest(Request $request)
     {
-        $finderConfig = new FinderConfiguration();
+        $finderConfig = new static();
         $columns = $request->get('columns');
-        if(FinderConfiguration::isArrayOrNull($columns))
+        if(static::isArrayOrNull($columns))
             $finderConfig->setColumns($columns);
         $finderConfig->setSearch($request->get('search'));
 
@@ -34,7 +57,7 @@ class FinderConfiguration
      *
      * @return boolean
      */
-    public static function isArrayOrNull($value)
+    protected static function isArrayOrNull($value)
     {
         return  is_array($value) || $value === NULL;
     }
@@ -52,7 +75,9 @@ class FinderConfiguration
      */
     public function setDescriptionEntity($descriptionEntity)
     {
-        $this->descriptionEntity = $descriptionEntity;
+        if (static::isArrayOrNull($descriptionEntity)) {
+            $this->descriptionEntity = $descriptionEntity;
+        }
     }
 
     /**
