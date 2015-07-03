@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenOrchestra\Pagination\Traits;
+namespace OpenOrchestra\Pagination\MongoTrait;
 
-trait MongoRepositoryTrait
+trait PaginateTrait
 {
 
     /**

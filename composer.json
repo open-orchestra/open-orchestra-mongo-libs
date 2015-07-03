@@ -23,7 +23,8 @@
   },
   "autoload": {
     "psr-0": {
-      "OpenOrchestra\\Pagination": ""
+      "OpenOrchestra\\Pagination": "",
+      "OpenOrchestra\\MongoTrait": ""
     }
   },
   "target-dir": "OpenOrchestra"
