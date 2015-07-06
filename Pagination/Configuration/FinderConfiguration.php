@@ -14,19 +14,45 @@ class FinderConfiguration
     protected $search = null;
 
     /**
+     * Construct
+     */
+    protected function __construct() {}
+
+    /**
+     * @param null|array  $descriptionEntity
+     * @param null|array  $columns
+     * @param null|string $search
+     *
+     * @return FinderConfiguration
+     */
+    public static function generateFromVariable($descriptionEntity = null, $columns = null, $search = null)
+    {
+        $configuration = new static();
+        if ($configuration->isArrayOrNull($columns)) {
+            $configuration->setColumns($columns);
+        }
+        $configuration->setSearch($search);
+        $configuration->setDescriptionEntity($descriptionEntity);
+
+        return $configuration;
+    }
+
+    /**
      * @param Request $request
      *
      * @return FinderConfiguration
      */
     public static function generateFromRequest(Request $request)
     {
-        $finderConfig = new FinderConfiguration();
-        $columns = $request->get('columns');
-        if(FinderConfiguration::isArrayOrNull($columns))
-            $finderConfig->setColumns($columns);
-        $finderConfig->setSearch($request->get('search'));
+        $configuration = new static();
 
-        return $finderConfig;
+        $columns = $request->get('columns');
+        if ($configuration->isArrayOrNull($columns)) {
+            $configuration->setColumns($columns);
+        }
+        $configuration->setSearch($request->get('search'));
+
+        return $configuration;
     }
 
     /**
@@ -34,7 +60,7 @@ class FinderConfiguration
      *
      * @return boolean
      */
-    public static function isArrayOrNull($value)
+    protected function isArrayOrNull($value)
     {
         return  is_array($value) || $value === NULL;
     }
@@ -52,7 +78,9 @@ class FinderConfiguration
      */
     public function setDescriptionEntity($descriptionEntity)
     {
-        $this->descriptionEntity = $descriptionEntity;
+        if ($this->isArrayOrNull($descriptionEntity)) {
+            $this->descriptionEntity = $descriptionEntity;
+        }
     }
 
     /**
