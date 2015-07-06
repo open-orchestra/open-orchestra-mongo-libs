@@ -27,13 +27,14 @@ class FinderConfiguration
      */
     public static function generateFromVariable($descriptionEntity = null, $columns = null, $search = null)
     {
-        $finderConfig = new static();
-        if(static::isArrayOrNull($columns))
-            $finderConfig->setColumns($columns);
-        $finderConfig->setSearch($search);
-        $finderConfig->setDescriptionEntity($descriptionEntity);
+        $configuration = new static();
+        if ($configuration->isArrayOrNull($columns)) {
+            $configuration->setColumns($columns);
+        }
+        $configuration->setSearch($search);
+        $configuration->setDescriptionEntity($descriptionEntity);
 
-        return $finderConfig;
+        return $configuration;
     }
 
     /**
@@ -43,13 +44,15 @@ class FinderConfiguration
      */
     public static function generateFromRequest(Request $request)
     {
-        $finderConfig = new static();
-        $columns = $request->get('columns');
-        if(static::isArrayOrNull($columns))
-            $finderConfig->setColumns($columns);
-        $finderConfig->setSearch($request->get('search'));
+        $configuration = new static();
 
-        return $finderConfig;
+        $columns = $request->get('columns');
+        if ($configuration->isArrayOrNull($columns)) {
+            $configuration->setColumns($columns);
+        }
+        $configuration->setSearch($request->get('search'));
+
+        return $configuration;
     }
 
     /**
@@ -57,7 +60,7 @@ class FinderConfiguration
      *
      * @return boolean
      */
-    protected static function isArrayOrNull($value)
+    protected function isArrayOrNull($value)
     {
         return  is_array($value) || $value === NULL;
     }
@@ -75,7 +78,7 @@ class FinderConfiguration
      */
     public function setDescriptionEntity($descriptionEntity)
     {
-        if (static::isArrayOrNull($descriptionEntity)) {
+        if ($this->isArrayOrNull($descriptionEntity)) {
             $this->descriptionEntity = $descriptionEntity;
         }
     }

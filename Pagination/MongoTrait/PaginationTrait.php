@@ -10,7 +10,6 @@ use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
  */
 trait PaginationTrait
 {
-
     /**
      * @param array|null  $descriptionEntity
      * @param array|null  $columns

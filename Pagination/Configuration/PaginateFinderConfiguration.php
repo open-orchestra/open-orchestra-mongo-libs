@@ -14,14 +14,14 @@ class PaginateFinderConfiguration extends FinderConfiguration
     protected $limit = null;
 
     /**
-     * @param null|array          $order
-     * @param null|int            $skip
-     * @param null|int            $limit
+     * @param null|array $order
+     * @param null|int   $skip
+     * @param null|int   $limit
      */
-    public function setPaginateConfiguration($order = null, $skip = null, $limit = null)
+    public function setPaginateConfiguration($order = array(), $skip = null, $limit = null)
     {
         $this->setLimit($limit);
-        if(static::isArrayOrNull($order)){
+        if($this->isArrayOrNull($order)){
             $this->setOrder($order);
         }
         $this->setSkip($skip);
@@ -34,7 +34,13 @@ class PaginateFinderConfiguration extends FinderConfiguration
      */
     public static function generateFromRequest(Request $request)
     {
-        $configuration = static::generateFromRequest($request);
+        $configuration = new static();
+
+        $columns = $request->get('columns');
+        if ($configuration->isArrayOrNull($columns)) {
+            $configuration->setColumns($columns);
+        }
+        $configuration->setSearch($request->get('search'));
 
         $configuration->setPaginateConfiguration(
             $request->get('order'),

@@ -118,16 +118,21 @@ class FinderConfigurationTest extends \PHPUnit_Framework_TestCase
     protected function createRequest($search = null, $columns = null, $order = null, $limit = null, $skip = null)
     {
         $request = new Request();
-        if($search !== NULL)
+        if($search !== NULL) {
             $request->request->set('search', $search);
-        if($columns !== NULL)
+        }
+        if($columns !== NULL) {
             $request->request->set('columns', $columns);
-        if($order !== NULL)
+        }
+        if($order !== NULL) {
             $request->request->set('order', $order);
-        if($limit !== NULL)
+        }
+        if($limit !== NULL) {
             $request->request->set('limit', $limit);
-        if($skip !== NULL)
+        }
+        if($skip !== NULL) {
             $request->request->set('skip', $skip);
+        }
 
         return $request;
     }
