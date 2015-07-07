@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
+use Solution\MongoAggregation\Pipeline\Stage;
 
 /**
  * Trait FilterTrait
@@ -10,121 +11,141 @@ use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 trait FilterTrait
 {
     /**
-     * @param string $value
-     * @param string $type
+     * @param Stage               $qa
+     * @param FinderConfiguration $configuration
      *
-     * @return mixed
+     * @return Stage
      */
-    protected function getFilterSearchField($value, $type)
+    protected function generateFilter(Stage $qa, FinderConfiguration $configuration)
     {
-        if ($type == 'integer') {
-            $filter = (int) $value;
-        } elseif ($type == 'boolean') {
-            $value = ($value === 'true' || $value === '1') ? true : false;
-            $filter = $value;
-        } else {
-            $value = preg_quote($value);
-            $filter = new \MongoRegex('/.*' . $value . '.*/i');
+        if (null !== $configuration->getSearch()) {
+            $filterSearch = $this->generateSearchFilter($configuration);
+            if (null !== $filterSearch) {
+                $qa->match($filterSearch);
+            }
+        }
+
+        return $qa;
+    }
+
+    /**
+     * @param FinderConfiguration $configuration
+     *
+     * @return array|null
+     */
+    protected function generateSearchFilter(FinderConfiguration $configuration)
+    {
+        $filter = null;
+        $descriptionEntity = $configuration->getDescriptionEntity();
+
+        $filtersColumn = $this->getFilterSearchColumn($configuration->getSearchIndex('columns'), $descriptionEntity);
+        $filtersAll = $this->getFilterSearchGlobal($configuration->getSearchIndex('global'), $descriptionEntity);
+        if (!empty($filtersAll) || !empty($filtersColumn)) {
+            $filter = array('$and' => $filtersColumn);
+            if (!empty($filtersAll) && empty($filtersColumn)) {
+                $filter = array('$or' => $filtersAll);
+            } elseif (!empty($filtersAll) && !empty($filtersColumn)) {
+                $filter = array('$and'=>array(
+                    array('$and' => $filtersColumn),
+                    array('$or' => $filtersAll),
+                ));
+            }
         }
 
         return $filter;
     }
 
     /**
-     * @param array|null  $descriptionEntity
-     * @param array|null  $columns
-     * @param string|null $search
+     * @param array|null $searchGlobal
+     * @param array|null $descriptionEntity
      *
-     * @deprecated will be removed in 0.3.0, use createQueryWithFilter instead
-     *
-     * @return \Doctrine\ODM\MongoDB\Query\Builder
+     * @return array
      */
-    protected function createQueryWithSearchFilter($descriptionEntity = null, $columns = null, $search = null)
+    protected function getFilterSearchGlobal($searchGlobal, $descriptionEntity)
     {
-        $config = FinderConfiguration::generateFromVariable($descriptionEntity, $columns, $search);
+        $filtersAll = array();
 
-        return $this->createQueryWithFilter($config);
+        if (null !== $searchGlobal) {
+            foreach ($descriptionEntity as $column) {
+                $name = $column['key'];
+                $type = isset($descriptionAttribute['type']) ? $descriptionAttribute['type'] : null;
+                $filtersAll[] = $this->generateFilterSearchField($name, $searchGlobal, $type);
+            }
+        }
+
+        return $filtersAll;
     }
 
     /**
-     * @param FinderConfiguration $configuration
+     * @param array|null $searchColumns
+     * @param array|null $descriptionEntity
      *
-     * @return mixed
+     * @return array
      */
-    protected function createQueryWithFilter(FinderConfiguration $configuration)
+    protected function getFilterSearchColumn($searchColumns, $descriptionEntity)
     {
-        $qb = $this->createQueryBuilder();
+        $filtersColumn = array();
 
-        $columns = $configuration->getColumns();
-        $descriptionEntity = $configuration->getDescriptionEntity();
-        $search = $configuration->getSearch();
-
-        if (null !== $columns) {
-            foreach ($columns as $column) {
-                $columnsName = $column['name'];
+        if (null !== $searchColumns) {
+            foreach ($searchColumns as $columnsName => $value) {
                 if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['key'])) {
                     $descriptionAttribute = $descriptionEntity[$columnsName];
                     $name = $descriptionAttribute['key'];
                     $type = isset($descriptionAttribute['type']) ? $descriptionAttribute['type'] : null;
-                    if ($column['searchable'] && !empty($column['search']['value']) && !empty($name)) {
-                        $value = $column['search']['value'];
-                        $qb->addAnd($qb->expr()->field($name)->equals($this->getFilterSearchField($value, $type)));
-                    }
-                    if (!empty($search) && $column['searchable'] && !empty($name)) {
-                        $qb->addOr($qb->expr()->field($name)->equals($this->getFilterSearchField($search, $type)));
+
+                    if (!empty($name)) {
+                        $filtersColumn[] = $this->generateFilterSearchField($name, $value, $type);
                     }
                 }
             }
         }
 
-        return $qb;
+        return $filtersColumn;
     }
 
     /**
-     * @param array|null  $descriptionEntity
-     * @param array|null  $columns
-     * @param string|null $search
+     * Generate filter for search text in field
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $type
+     *
+     * @return array
+     */
+    protected function generateFilterSearchField($name, $value, $type)
+    {
+        if ($type == 'integer') {
+            $filter = array($name => (int) $value);
+        } elseif ($type == 'boolean') {
+            $value = ($value === 'true' || $value === '1') ? true : false;
+            $filter = array($name => $value);
+        } else {
+            $value = preg_quote($value);
+            $filter = array($name => new \MongoRegex('/.*'.$value.'.*/i'));
+        }
+
+        return $filter;
+    }
+
+
+    /**
+     * @param Stage       $qa
      * @param array|null  $order
+     * @param array|null  $descriptionEntity
      *
-     * @deprecated will be removed in 0.3.0, use createQueryWithOrderedFilter instead
-     *
-     * @return \Doctrine\ODM\MongoDB\Query\Builder
+     * @return Stage
      */
-    protected function createQueryWithSearchAndOrderFilter($descriptionEntity = null, $columns = null, $search = null, $order = null)
+    protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null)
     {
-        $config = FinderConfiguration::generateFromVariable($descriptionEntity, $columns, $search);
-
-        return $this->createQueryWithOrderedFilter($config, $order);
-    }
-
-    /**
-     * @param FinderConfiguration $configuration
-     * @param array|null          $order
-     *
-     * @return mixed
-     */
-    protected function createQueryWithOrderedFilter(FinderConfiguration $configuration, $order)
-    {
-        $qb = $this->createQueryWithFilter($configuration);
-
-        $columns = $configuration->getColumns();
-        if (null !== $order && null !== $columns) {
-            foreach ($order as $orderColumn) {
-                $numberColumns = $orderColumn['column'];
-                if ($columns[$numberColumns]['orderable']) {
-                    if (!empty($columns[$numberColumns]['name'])) {
-                        $columnsName = $columns[$numberColumns]['name'];
-                        $descriptionEntity = $configuration->getDescriptionEntity();
-                        if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['key'])) {
-                            $name = $descriptionEntity[$columnsName]['key'];
-                            $dir = ($orderColumn['dir'] == 'desc') ? -1 : 1;
-                            $qb->sort($name, $dir);
-                        }
-                    }
-                }
+        if (null !== $order) {
+            $columnsName = $order['name'];
+            if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['key'])) {
+                $name = $descriptionEntity[$columnsName]['key'];
+                $dir = ($order['dir'] == 'desc') ? -1 : 1;
+                $qa->sort(array($name => $dir));
             }
         }
 
-        return $qb;
+        return $qa;
     }
 }

@@ -10,7 +10,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "symfony/http-foundation": "*"
+    "symfony/http-foundation": "*",
+    "solution/mongo-odm-aggregation-bundle": "*"
   },
   "require-dev": {
     "psr/log": "1.0.0",
@@ -24,7 +25,8 @@
   "autoload": {
     "psr-0": {
       "OpenOrchestra\\Pagination": "",
-      "OpenOrchestra\\MongoTrait": ""
+      "OpenOrchestra\\MongoTrait": "",
+      "OpenOrchestra\\Repository": ""
     }
   },
   "target-dir": "OpenOrchestra"
