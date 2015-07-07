@@ -46,7 +46,7 @@ class FinderConfiguration
     }
 
     /**
-     * @return array descriptionEntity
+     * @return null|array descriptionEntity
      */
     public function getDescriptionEntity()
     {
@@ -62,7 +62,7 @@ class FinderConfiguration
     }
 
     /**
-     * @return mixed search
+     * @return null|array
      */
     public function getSearch()
     {
