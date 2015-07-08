@@ -4,53 +4,26 @@ namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
+use Solution\MongoAggregation\Pipeline\Stage;
 
 /**
  * Trait PaginationTrait
  */
 trait PaginationTrait
 {
-    /**
-     * @param array|null  $descriptionEntity
-     * @param array|null  $columns
-     * @param string|null $search
-     * @param array|null  $order
-     * @param int|null    $skip
-     * @param int|null    $limit
-     *
-     * @deprecated will be removed in 0.3.0, use findForPaginate instead
-     *
-     * @return array
-     */
-    public function findForPaginateAndSearch($descriptionEntity = null, $columns = null, $search = null, $order = null, $skip = null, $limit = null)
-    {
-        $configuration = PaginateFinderConfiguration::generateFromVariable($descriptionEntity, $columns, $search);
-        $configuration->setPaginateConfiguration($order, $skip, $limit);
-
-        return $this->findForPaginate($configuration);
-    }
+    use FilterTrait;
 
     /**
      * @param PaginateFinderConfiguration $configuration
      *
-     * @return mixed
-     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     * @return array
      */
     public function findForPaginate(PaginateFinderConfiguration $configuration)
     {
-        $qb = $this->createQueryWithOrderedFilter($configuration, $configuration->getOrder());
+        $qa = $this->createAggregationQuery();
+        $qa = $this->generateFilterForPaginate($qa,$configuration);
 
-        $skip = $configuration->getSkip();
-        if (null !== $skip && $skip > 0) {
-            $qb->skip($skip);
-        }
-
-        $limit = $configuration->getLimit();
-        if (null !== $limit) {
-            $qb->limit($limit);
-        }
-
-        return $qb->getQuery()->execute();
+        return $this->hydrateAggregateQuery($qa);
     }
 
     /**
@@ -58,25 +31,9 @@ trait PaginationTrait
      */
     public function count()
     {
-        $qb = $this->createQueryBuilder();
+        $qa = $this->createAggregationQuery();
 
-        return $qb->count()->getQuery()->execute();
-    }
-
-    /**
-     * @param array|null $columns
-     * @param array|null $descriptionEntity
-     * @param array|null $search
-     *
-     * @deprecated will be removed in 0.3.0, use countWithFilter instead
-     *
-     * @return int
-     */
-    public function countWithSearchFilter($descriptionEntity = null, $columns = null, $search = null)
-    {
-        $config = FinderConfiguration::generateFromVariable($descriptionEntity, $columns, $search);
-
-        return $this->countWithFilter($config);
+        return $this->countDocumentAggregateQuery($qa);
     }
 
     /**
@@ -86,8 +43,55 @@ trait PaginationTrait
      */
     public function countWithFilter(FinderConfiguration $configuration)
     {
-        $qb = $this->createQueryWithFilter($configuration);
+        $qa = $this->createAggregationQuery();
+        $qa = $this->generateFilter($qa, $configuration);
 
-        return $qb->count()->getQuery()->execute();
+        return $this->countDocumentAggregateQuery($qa);
+    }
+
+    /**
+     * @param Stage                       $qa
+     * @param PaginateFinderConfiguration $configuration
+     *
+     * @return Stage
+     */
+    protected function generateFilterForPaginate(Stage $qa, PaginateFinderConfiguration $configuration)
+    {
+        $qa = $this->generateFilter($qa, $configuration);
+        $qa = $this->generateFilterSort($qa, $configuration->getOrder(), $configuration->getDescriptionEntity());
+        $qa = $this->generateSkipFilter($qa, $configuration->getSkip());
+        $qa = $this->generateLimitFilter($qa, $configuration->getLimit());
+
+        return $qa;
+    }
+
+    /**
+     * @param Stage        $qa
+     * @param integer|null $limit
+     *
+     * @return Stage
+     */
+    protected function generateLimitFilter(Stage $qa, $limit = null)
+    {
+        if (null !== $limit) {
+            $qa->limit($limit);
+        }
+
+        return $qa;
+    }
+
+    /**
+     * @param Stage        $qa
+     * @param integer|null $skip
+     *
+     * @return Stage
+     */
+    protected function generateSkipFilter(Stage $qa, $skip = null)
+    {
+        if (null !== $skip && $skip > 0) {
+            $qa->skip($skip);
+        }
+
+        return $qa;
     }
 }

@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 class FinderConfiguration
 {
     protected $descriptionEntity = null;
-    protected $columns = null;
     protected $search = null;
 
     /**
@@ -20,17 +19,13 @@ class FinderConfiguration
 
     /**
      * @param null|array  $descriptionEntity
-     * @param null|array  $columns
-     * @param null|string $search
+     * @param null|array  $search
      *
      * @return FinderConfiguration
      */
-    public static function generateFromVariable($descriptionEntity = null, $columns = null, $search = null)
+    public static function generateFromVariable($descriptionEntity = null, $search = null)
     {
         $configuration = new static();
-        if ($configuration->isArrayOrNull($columns)) {
-            $configuration->setColumns($columns);
-        }
         $configuration->setSearch($search);
         $configuration->setDescriptionEntity($descriptionEntity);
 
@@ -45,28 +40,13 @@ class FinderConfiguration
     public static function generateFromRequest(Request $request)
     {
         $configuration = new static();
-
-        $columns = $request->get('columns');
-        if ($configuration->isArrayOrNull($columns)) {
-            $configuration->setColumns($columns);
-        }
         $configuration->setSearch($request->get('search'));
 
         return $configuration;
     }
 
     /**
-     * @param string $value
-     *
-     * @return boolean
-     */
-    protected function isArrayOrNull($value)
-    {
-        return  is_array($value) || $value === NULL;
-    }
-
-    /**
-     * @return array descriptionEntity
+     * @return null|array descriptionEntity
      */
     public function getDescriptionEntity()
     {
@@ -78,29 +58,11 @@ class FinderConfiguration
      */
     public function setDescriptionEntity($descriptionEntity)
     {
-        if ($this->isArrayOrNull($descriptionEntity)) {
-            $this->descriptionEntity = $descriptionEntity;
-        }
+        $this->descriptionEntity = $descriptionEntity;
     }
 
     /**
-     * @return array columns
-     */
-    public function getColumns()
-    {
-        return $this->columns;
-    }
-
-    /**
-     * @param null|array $columns
-     */
-    public function setColumns($columns)
-    {
-        $this->columns = $columns;
-    }
-
-    /**
-     * @return string search
+     * @return null|array
      */
     public function getSearch()
     {
@@ -108,7 +70,17 @@ class FinderConfiguration
     }
 
     /**
-     * @param string $search
+     * @param string $index
+     *
+     * @return mixed search
+     */
+    public function getSearchIndex($index)
+    {
+        return isset($this->search[$index]) ? $this->search[$index] : null;
+    }
+
+    /**
+     * @param array $search
      */
     public function setSearch($search)
     {
