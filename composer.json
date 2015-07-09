@@ -10,12 +10,12 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "symfony/http-foundation": "*",
-    "doctrine/mongodb-odm": "1.0.0-BETA13",
-    "doctrine/mongodb-odm-bundle" : "3.0.0",
-    "solution/mongo-odm-aggregation-bundle": "*"
+    "symfony/http-foundation": "*"
   },
   "require-dev": {
+    "doctrine/mongodb-odm": "1.0.0-BETA13",
+    "doctrine/mongodb-odm-bundle" : "3.0.0",
+    "solution/mongo-odm-aggregation-bundle": "*",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
