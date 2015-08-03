@@ -12,7 +12,7 @@ trait Keywordable
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ODM\EmbedMany(targetDocument="OpenOrchestra\ModelBundle\Document\EmbedKeyword")
+     * @ODM\EmbedMany(targetDocument="OpenOrchestra\ModelInterface\Model\EmbedKeywordInterface")
      */
     protected $keywords;
 
