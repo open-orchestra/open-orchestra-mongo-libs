@@ -25,6 +25,8 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     }
 
     /**
+     * @param string $criteria
+     *
      * @return array
      */
     public function findWithTransverseCriteria($criteria)
@@ -33,6 +35,8 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     }
 
     /**
+     * @param string $criteria
+     *
      * @return string
      */
     public function createTransverseCriteria($criteria)
@@ -43,9 +47,9 @@ abstract class AbstractAggregateRepository extends DocumentRepository
         $collectionName = $metaData->getCollection();
         $dataBase = $documentManager->getDocumentDatabase($documentName);
 
-        $return = $dataBase->execute('db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . ');');
+        $return = $dataBase->execute('db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . '});');
 
-        return $return['retval'];
+        return (is_array($return) && array_key_exists('ok', $return ) && $return['ok'] == 1) ? $return['retval'] : null;
     }
 
     /**
