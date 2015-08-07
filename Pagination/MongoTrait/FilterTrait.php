@@ -116,7 +116,7 @@ trait FilterTrait
      * @param string $value
      * @param string $type
      *
-     * @return array
+     * @return array|null
      */
     protected function generateFilterSearchField($name, $value, $type)
     {
