@@ -27,17 +27,18 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     /**
      * @param string $criteria
      *
-     * @return array
+     * @return array|null
      */
     public function findWithTransverseCriteria($criteria)
     {
-        return $this->findBy($this->createTransverseCriteria($criteria));
+        $criteria = $this->createTransverseCriteria($criteria);
+        return ($criteria != null) ? $this->findBy($criteria) : null;
     }
 
     /**
      * @param string $criteria
      *
-     * @return string
+     * @return string|null
      */
     public function createTransverseCriteria($criteria)
     {
