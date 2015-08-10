@@ -14,6 +14,7 @@ trait Statusable
      * @var StatusInterface $status
      *
      * @ODM\EmbedOne(targetDocument="OpenOrchestra\ModelInterface\Model\EmbedStatusInterface")
+     * @ORCHESTRA\Search(key="status_label", field="status.labels", type="translatedValue")
      */
     protected $status;
 

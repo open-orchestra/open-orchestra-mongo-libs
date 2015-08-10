@@ -11,6 +11,7 @@ trait Versionable
      * @var int $version
      *
      * @ODM\Field(type="int")
+     * @ORCHESTRA\Search(key="version", type="integer")
      */
     protected $version = 1;
 

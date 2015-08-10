@@ -67,9 +67,12 @@ trait FilterTrait
 
         if (null !== $searchGlobal) {
             foreach ($descriptionEntity as $column) {
-                $name = $column['key'];
-                $type = isset($descriptionAttribute['type']) ? $descriptionAttribute['type'] : null;
-                $filtersAll[] = $this->generateFilterSearchField($name, $searchGlobal, $type);
+                $name = $column->getField();
+                $type = $column->getType();
+                $searchFilter = $this->generateFilterSearchField($name, $searchGlobal, $type);
+                if (null !== $searchFilter) {
+                    $filtersAll[] = $searchFilter;
+                }
             }
         }
 
@@ -88,13 +91,16 @@ trait FilterTrait
 
         if (null !== $searchColumns) {
             foreach ($searchColumns as $columnsName => $value) {
-                if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['key'])) {
+                if (isset($descriptionEntity[$columnsName]) && null !== $descriptionEntity[$columnsName]->getField()) {
                     $descriptionAttribute = $descriptionEntity[$columnsName];
-                    $name = $descriptionAttribute['key'];
-                    $type = isset($descriptionAttribute['type']) ? $descriptionAttribute['type'] : null;
+                    $name = $descriptionAttribute->getField();
+                    $type = $descriptionAttribute->getType();
 
                     if (!empty($name)) {
-                        $filtersColumn[] = $this->generateFilterSearchField($name, $value, $type);
+                        $searchfilter = $this->generateFilterSearchField($name, $value, $type);
+                        if (null !== $searchfilter) {
+                            $filtersColumn[] = $searchfilter;
+                        }
                     }
                 }
             }
@@ -110,23 +116,24 @@ trait FilterTrait
      * @param string $value
      * @param string $type
      *
-     * @return array
+     * @return array|null
      */
     protected function generateFilterSearchField($name, $value, $type)
     {
+        $filter = null;
+
         if ($type == 'integer') {
             $filter = array($name => (int) $value);
         } elseif ($type == 'boolean') {
             $value = ($value === 'true' || $value === '1') ? true : false;
             $filter = array($name => $value);
-        } else {
+        } elseif ($type == 'string'){
             $value = preg_quote($value);
             $filter = array($name => new \MongoRegex('/.*'.$value.'.*/i'));
         }
 
         return $filter;
     }
-
 
     /**
      * @param Stage       $qa
@@ -139,8 +146,8 @@ trait FilterTrait
     {
         if (null !== $order) {
             $columnsName = $order['name'];
-            if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['key'])) {
-                $name = $descriptionEntity[$columnsName]['key'];
+            if (isset($descriptionEntity[$columnsName]) && null !== $descriptionEntity[$columnsName]->getField()) {
+                $name = $descriptionEntity[$columnsName]->getField();
                 $dir = ($order['dir'] == 'desc') ? -1 : 1;
                 $qa->sort(array($name => $dir));
             }
