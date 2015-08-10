@@ -2,7 +2,6 @@
 
 namespace OpenOrchestra\Mapping\Tests\Mapping\Annotations;
 
-use Phake;
 use OpenOrchestra\Mapping\Annotations\Document;
 
 /**
@@ -10,14 +9,14 @@ use OpenOrchestra\Mapping\Annotations\Document;
  */
 class DocumentTest extends \PHPUnit_Framework_TestCase
 {
-    protected $node;
+    protected $fakeClass;
 
     /**
      * setUp
      */
     public function setUp()
     {
-        $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        $this->fakeClass = new FakeClassDocument();
     }
 
     /**
@@ -26,7 +25,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public function testGetSource()
     {
         $document = new Document(array('sourceField' => 'name'));
-        $this->assertSame('getName', $document->getSource($this->node));
+        $this->assertSame('getName', $document->getSource($this->fakeClass));
     }
 
     /**
@@ -39,7 +38,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     {
         $document = new Document($parameters);
         $this->setExpectedException($exception);
-        $document->getSource($this->node);
+        $document->getSource($this->fakeClass);
     }
 
     /**
@@ -62,8 +61,8 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGenerated()
     {
-        $document = new Document(array('generatedField' => 'nodeId'));
-        $this->assertSame('getNodeId', $document->getGenerated($this->node));
+        $document = new Document(array('generatedField' => 'fakeId'));
+        $this->assertSame('getFakeId', $document->getGenerated($this->fakeClass));
     }
 
     /**
@@ -76,7 +75,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     {
         $document = new Document($parameters);
         $this->setExpectedException($exception);
-        $document->getGenerated($this->node);
+        $document->getGenerated($this->fakeClass);
     }
 
     /**
@@ -99,8 +98,8 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetGenerated()
     {
-        $document = new Document(array('generatedField' => 'nodeId'));
-        $this->assertSame('setNodeId', $document->setGenerated($this->node));
+        $document = new Document(array('generatedField' => 'fakeId'));
+        $this->assertSame('setFakeId', $document->setGenerated($this->fakeClass));
     }
 
     /**
@@ -113,7 +112,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     {
         $document = new Document($parameters);
         $this->setExpectedException($exception);
-        $document->setGenerated($this->node);
+        $document->setGenerated($this->fakeClass);
     }
 
     /**
@@ -154,4 +153,15 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
             array(array('serviceName' => 'bar', 'testMethod' => 'foo')),
         );
     }
+}
+
+/**
+ * Class FakeClass
+ */
+class FakeClassDocument
+{
+    public function getName(){}
+    public function getfakeId(){}
+    public function setFakeId(){}
+    public function getServiceName(){}
 }
