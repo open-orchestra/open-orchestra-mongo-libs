@@ -32,6 +32,7 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     public function findWithTransverseCriteria($criteria)
     {
         $criteria = $this->createTransverseCriteria($criteria);
+
         return ($criteria != null) ? $this->findBy($criteria) : null;
     }
 
@@ -48,7 +49,10 @@ abstract class AbstractAggregateRepository extends DocumentRepository
         $collectionName = $metaData->getCollection();
         $dataBase = $documentManager->getDocumentDatabase($documentName);
 
-        $return = $dataBase->execute('db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . '});');
+        $return = $dataBase->command(array(
+                'eval' =>'db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . '});',
+                'nolock' => true
+        ));
 
         return (is_array($return) && array_key_exists('ok', $return ) && $return['ok'] == 1) ? $return['retval'] : null;
     }
