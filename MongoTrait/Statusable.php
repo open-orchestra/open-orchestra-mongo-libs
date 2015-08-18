@@ -19,6 +19,11 @@ trait Statusable
     protected $status;
 
     /**
+     * @var bool
+     */
+    protected $statusChanged = false;
+
+    /**
      * Set status
      *
      * @param StatusInterface|null $status
@@ -26,6 +31,7 @@ trait Statusable
     public function setStatus(StatusInterface $status = null)
     {
         $this->status = null;
+        $this->statusChanged = true;
         if ($status instanceof StatusInterface) {
             $this->status = EmbedStatus::createFromStatus($status);
         }
@@ -39,5 +45,13 @@ trait Statusable
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStatusChanged()
+    {
+        return $this->statusChanged;
     }
 }
