@@ -120,19 +120,7 @@ trait FilterTrait
      */
     protected function generateFilterSearchField($name, $value, $type)
     {
-        $filter = null;
-
-        if ($type == 'integer') {
-            $filter = array($name => (int) $value);
-        } elseif ($type == 'boolean') {
-            $value = ($value === 'true' || $value === '1') ? true : false;
-            $filter = array($name => $value);
-        } elseif ($type == 'string'){
-            $value = preg_quote($value);
-            $filter = array($name => new \MongoRegex('/.*'.$value.'.*/i'));
-        }
-
-        return $filter;
+        return $this->filterTypeManager->generateFilter($type, $name, $value, $this->getDocumentName());
     }
 
     /**
