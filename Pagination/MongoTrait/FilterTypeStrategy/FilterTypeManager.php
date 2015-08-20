@@ -27,8 +27,6 @@ class FilterTypeManager
      */
     public function generateFilter($type, $name, $value, $documentName)
     {
-        $filter = null;
-
         /**
          * @var FilterTypeInterface $filterType
          */
@@ -38,6 +36,6 @@ class FilterTypeManager
             }
         }
 
-        return $filter;
+        return null;
     }
 }
