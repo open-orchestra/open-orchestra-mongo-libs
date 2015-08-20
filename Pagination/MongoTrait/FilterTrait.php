@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
+use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
 
 /**
@@ -10,6 +11,19 @@ use Solution\MongoAggregation\Pipeline\Stage;
  */
 trait FilterTrait
 {
+    /**
+     * @var FilterTypeManager
+     */
+    protected $filterTypeManager;
+
+    /**
+     * @param FilterTypeManager $filterTypeManager
+     */
+    public function setFilterTypeManager(FilterTypeManager $filterTypeManager)
+    {
+        $this->filterTypeManager = $filterTypeManager;
+    }
+
     /**
      * @param Stage               $qa
      * @param FinderConfiguration $configuration

@@ -3,7 +3,6 @@
 namespace OpenOrchestra\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
 use Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder;
 
@@ -12,11 +11,6 @@ use Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder;
  */
 abstract class AbstractAggregateRepository extends DocumentRepository
 {
-    /**
-     * @var FilterTypeManager
-     */
-    protected $filterTypeManager;
-
     /**
      * @var AggregationQueryBuilder
      */
@@ -28,11 +22,6 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     public function setAggregationQueryBuilder($aggregationQueryBuilder)
     {
         $this->aggregationQueryBuilder = $aggregationQueryBuilder;
-    }
-
-    public function setFilterTypeManager(FilterTypeManager $filterTypeManager)
-    {
-        $this->filterTypeManager = $filterTypeManager;
     }
 
     /**
