@@ -34,7 +34,7 @@ class FilterTypeManager
          */
         foreach ($this->filters as $filterType){
             if ($filterType->support($type)) {
-                $filter = $filterType->generateFilter($name, $value, $documentName);
+                return $filterType->generateFilter($name, $value, $documentName);
             }
         }
 

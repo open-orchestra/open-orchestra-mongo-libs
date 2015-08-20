@@ -14,6 +14,9 @@ class StringFilterStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $strategy;
 
+    /**
+     * Set up
+     */
     public function setUp()
     {
         $this->strategy = new StringFilterStrategy();
