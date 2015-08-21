@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
+use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
 
 /**
@@ -10,6 +11,19 @@ use Solution\MongoAggregation\Pipeline\Stage;
  */
 trait FilterTrait
 {
+    /**
+     * @var FilterTypeManager
+     */
+    protected $filterTypeManager;
+
+    /**
+     * @param FilterTypeManager $filterTypeManager
+     */
+    public function setFilterTypeManager(FilterTypeManager $filterTypeManager)
+    {
+        $this->filterTypeManager = $filterTypeManager;
+    }
+
     /**
      * @param Stage               $qa
      * @param FinderConfiguration $configuration
@@ -120,19 +134,7 @@ trait FilterTrait
      */
     protected function generateFilterSearchField($name, $value, $type)
     {
-        $filter = null;
-
-        if ($type == 'integer') {
-            $filter = array($name => (int) $value);
-        } elseif ($type == 'boolean') {
-            $value = ($value === 'true' || $value === '1') ? true : false;
-            $filter = array($name => $value);
-        } elseif ($type == 'string'){
-            $value = preg_quote($value);
-            $filter = array($name => new \MongoRegex('/.*'.$value.'.*/i'));
-        }
-
-        return $filter;
+        return $this->filterTypeManager->generateFilter($type, $name, $value, $this->getDocumentName());
     }
 
     /**

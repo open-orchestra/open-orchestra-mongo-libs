@@ -1,0 +1,32 @@
+parameters:
+    open_orchestra_pagination.filter_type.manager.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager
+    open_orchestra_pagination.filter_type.string_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\StringFilterStrategy
+    open_orchestra_pagination.filter_type.integer_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\IntegerFilterStrategy
+    open_orchestra_pagination.filter_type.boolean_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\BooleanFilterStrategy
+    open_orchestra_pagination.filter_type.translated_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\TranslatedFilterStrategy
+
+services:
+    open_orchestra_pagination.filter_type.manager:
+        class: %open_orchestra_pagination.filter_type.manager.class%
+
+    open_orchestra_pagination.filter_type.string_filter:
+        class: %open_orchestra_pagination.filter_type.string_filter.class%
+        tags:
+            - { name: open_orchestra_pagination.filter_type.strategy }
+
+    open_orchestra_pagination.filter_type.integer_filter:
+        class: %open_orchestra_pagination.filter_type.integer_filter.class%
+        tags:
+            - { name: open_orchestra_pagination.filter_type.strategy }
+
+    open_orchestra_pagination.filter_type.boolean_filter:
+        class: %open_orchestra_pagination.filter_type.boolean_filter.class%
+        tags:
+            - { name: open_orchestra_pagination.filter_type.strategy }
+
+    open_orchestra_pagination.filter_type.translated_filter:
+        class: %open_orchestra_pagination.filter_type.translated_filter.class%
+        arguments:
+            - @doctrine.odm.mongodb.document_manager
+        tags:
+            - { name: open_orchestra_pagination.filter_type.strategy }
