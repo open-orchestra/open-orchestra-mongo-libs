@@ -3,9 +3,9 @@
 namespace OpenOrchestra\MongoTrait;
 
 /**
- * Class TrashCanable
+ * Class SoftDeleteable
  */
-trait TrashCanable
+trait SoftDeleteable
 {
     /**
      * @var boolean
