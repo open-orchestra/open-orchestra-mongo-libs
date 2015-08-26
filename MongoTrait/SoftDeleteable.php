@@ -29,7 +29,7 @@ trait SoftDeleteable
      *
      * @return boolean $deleted
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }
