@@ -25,39 +25,6 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     }
 
     /**
-     * @param string $criteria
-     *
-     * @return array|null
-     */
-    public function findWithTransverseCriteria($criteria)
-    {
-        $criteria = $this->createTransverseCriteria($criteria);
-
-        return ($criteria !== null) ? $this->findBy($criteria) : null;
-    }
-
-    /**
-     * @param string $criteria
-     *
-     * @return string|null
-     */
-    public function createTransverseCriteria($criteria)
-    {
-        $documentManager = $this->getDocumentManager();
-        $documentName = $this->getDocumentName();
-        $metaData = $documentManager->getClassMetadata($documentName);
-        $collectionName = $metaData->getCollection();
-        $dataBase = $documentManager->getDocumentDatabase($documentName);
-
-        $return = $dataBase->command(array(
-                'eval' =>'db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . '});',
-                'nolock' => true
-        ));
-
-        return (is_array($return) && array_key_exists('ok', $return ) && $return['ok'] == 1) ? $return['retval'] : null;
-    }
-
-    /**
      * @param string|null $stage
      *
      * @return Stage
