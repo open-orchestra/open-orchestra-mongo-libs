@@ -43,40 +43,16 @@ class TranslatedFilterStrategy implements FilterTypeInterface
         $collection = $this->documentManager->getDocumentCollection($documentName);
         $collectionName = $collection->getName();
         $dataBase = $this->documentManager->getDocumentDatabase($documentName);
-        $criteria = array($name.'.*.value' =>  new \MongoRegex('/.*'.$value.'.*/i'));
-        $filter = $this->parseCriteria($criteria, $collectionName, $dataBase);
+        $key = $name.'.*.value';
+        $value = new \MongoRegex('/.*'.$value.'.*/i');
+        $filter = $this->generateCriteria($key, $value, $collectionName, $dataBase);
+
         if (!empty($filter)) {
 
-            return $filter;
+            return array('$or' => $filter);
         }
 
         return null;
-    }
-
-
-    /**
-     * @param array    $criteria
-     * @param string   $collectionName
-     * @param Database $dataBase
-     *
-     * @return array
-     */
-    protected function parseCriteria($criteria, $collectionName, $dataBase)
-    {
-        foreach ($criteria as $key => $value) {
-            if(strpos($key, "*") !== false){
-                $res = $this->generateCriteria($key, $value, $collectionName, $dataBase);
-                if (!empty($res)) {
-                    $criteria['$or'] = $res;
-                    unset($criteria[$key]);
-                }
-            } elseif(is_array($value)) {
-                $res = $this->parseCriteria($value, $collectionName, $dataBase);
-                $criteria[$key] = $res;
-            }
-        }
-
-        return $criteria;
     }
 
     /**
@@ -102,7 +78,7 @@ class TranslatedFilterStrategy implements FilterTypeInterface
         $preColumnn = $column[1];
         $postColumn = $column[2];
 
-        $return = $dataBase->command(array(
+        $commandResult = $dataBase->command(array(
             "mapreduce" => $collectionName,
             "map" => $map,
             "reduce" => $reduce,
@@ -113,14 +89,14 @@ class TranslatedFilterStrategy implements FilterTypeInterface
             )
         ));
 
-        $res = array();
-        if (is_array($return) && array_key_exists('ok', $return ) && $return['ok'] == 1) {
-            foreach($return['results'] as $filter) {
-                $res[] = array($filter['_id'] => $value);
+        $criteria = array();
+        if (is_array($commandResult) && array_key_exists('ok', $commandResult ) && $commandResult['ok'] == 1) {
+            foreach ($commandResult['results'] as $filter) {
+                $criteria[] = array($filter['_id'] => $value);
             }
         }
 
-        return $res;
+        return $criteria;
     }
 
     /**
