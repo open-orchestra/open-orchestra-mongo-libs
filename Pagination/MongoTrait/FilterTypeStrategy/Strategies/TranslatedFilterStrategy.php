@@ -4,6 +4,7 @@ namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
+use Doctrine\MongoDB\Database;
 
 /**
  * Class TranslatedFilterStrategy
@@ -39,16 +40,63 @@ class TranslatedFilterStrategy implements FilterTypeInterface
      */
     public function generateFilter($name, $value, $documentName)
     {
-        $metaData = $this->documentManager->getClassMetadata($documentName);
-        $collectionName = $metaData->getCollection();
+        $collection = $this->documentManager->getDocumentCollection($documentName);
+        $collectionName = $collection->getName();
         $dataBase = $this->documentManager->getDocumentDatabase($documentName);
-        $criteria = '{"'.$name.'.*.value": /.*'.$value.'.*/i}';
-        $return = $dataBase->command(array(
-            'eval' =>'db.loadServerScripts();return selectEnumeration({collection: "' . $collectionName . '", criteria: ' . $criteria . '});',
-            'nolock' => true
+        $key = $name.'.*.value';
+        $value = new \MongoRegex('/.*'.$value.'.*/i');
+        $filter = $this->generateCriteria($key, $value, $collectionName, $dataBase);
+
+        if (!empty($filter)) {
+
+            return array('$or' => $filter);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string   $key
+     * @param string   $value
+     * @param string   $collectionName
+     * @param Database $dataBase
+     *
+     * @return array
+     */
+    protected function generateCriteria($key, $value, $collectionName, $dataBase)
+    {
+        $map = new \MongoCode(
+            "function() {
+                    for (var key in eval('this.' + preColumn)) {
+                        emit(preColumn + '.' + key + '.' + postColumn, null);
+                    }
+            }"
+        );
+        $reduce = new \MongoCode("function(k, vals) {  return null; }");
+
+        preg_match('/(.*)\.\*.(.*)/',$key, $column);
+        $preColumnn = $column[1];
+        $postColumn = $column[2];
+
+        $commandResult = $dataBase->command(array(
+            "mapreduce" => $collectionName,
+            "map" => $map,
+            "reduce" => $reduce,
+            "out" => array("inline" => 1),
+            "scope" => array(
+                "preColumn" => "$preColumnn",
+                "postColumn" => "$postColumn"
+            )
         ));
 
-        return (is_array($return) && array_key_exists('ok', $return ) && $return['ok'] == 1) ? $return['retval'] : null;
+        $criteria = array();
+        if (is_array($commandResult) && array_key_exists('ok', $commandResult ) && $commandResult['ok'] == 1) {
+            foreach ($commandResult['results'] as $filter) {
+                $criteria[] = array($filter['_id'] => $value);
+            }
+        }
+
+        return $criteria;
     }
 
     /**
