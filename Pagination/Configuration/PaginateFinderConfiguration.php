@@ -38,8 +38,8 @@ class PaginateFinderConfiguration extends FinderConfiguration
 
         $configuration->setPaginateConfiguration(
             $request->get('order'),
-            $request->get('skip'),
-            $request->get('limit')
+            $request->get('start'),
+            $request->get('length')
         );
 
         return $configuration;
