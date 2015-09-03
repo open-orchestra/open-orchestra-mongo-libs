@@ -105,12 +105,12 @@ class FinderConfigurationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param null|string $search
      * @param null|array  $order
-     * @param null|int    $limit
-     * @param null|int    $skip
+     * @param null|int    $length
+     * @param null|int    $start
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    protected function createRequest($search = null, $order = null, $limit = null, $skip = null)
+    protected function createRequest($search = null, $order = null, $length = null, $start = null)
     {
         $request = new Request();
         if($search !== null) {
@@ -119,11 +119,11 @@ class FinderConfigurationTest extends \PHPUnit_Framework_TestCase
         if($order !== null) {
             $request->request->set('order', $order);
         }
-        if($limit !== null) {
-            $request->request->set('limit', $limit);
+        if($length !== null) {
+            $request->request->set('length', $length);
         }
-        if($skip !== null) {
-            $request->request->set('skip', $skip);
+        if($start !== null) {
+            $request->request->set('start', $start);
         }
 
         return $request;
