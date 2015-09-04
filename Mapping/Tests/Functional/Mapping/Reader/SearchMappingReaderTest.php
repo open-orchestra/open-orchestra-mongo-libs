@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\BaseBundle\Tests\Functional\Mapping\Reader;
+namespace OpenOrchestra\Mapping\Tests\Functional\Mapping\Reader;
 
 use OpenOrchestra\Mapping\Annotations as ORCHESTRA;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,6 +21,9 @@ class SearchMappingReaderTest extends KernelTestCase
         $this->fakeClass = new FakeClassAnnotation();
 
         static::bootKernel();
+        if (!static::$kernel->getContainer()->hasParameter('open_orchestra.annotation_search_reader')) {
+            $this->markTestSkipped('no service annotation reader');
+        }
         $this->readerSearch = static::$kernel->getContainer()->get('open_orchestra.annotation_search_reader');
     }
 
