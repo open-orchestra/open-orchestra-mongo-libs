@@ -13,8 +13,8 @@
     "symfony/http-foundation": "*"
   },
   "require-dev": {
-    "doctrine/mongodb-odm": "1.0.1",
-    "doctrine/mongodb-odm-bundle" : "3.0.0",
+    "doctrine/mongodb-odm": "1.0.2",
+    "doctrine/mongodb-odm-bundle" : "3.0.1",
     "solution/mongo-odm-aggregation-bundle": "*",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
