@@ -29,7 +29,8 @@
       "OpenOrchestra\\Mapping": "",
       "OpenOrchestra\\Pagination": "",
       "OpenOrchestra\\MongoTrait": "",
-      "OpenOrchestra\\Repository": ""
+      "OpenOrchestra\\Repository": "",
+      "OpenOrchestra\\MongoBundle": ""
     }
   },
   "target-dir": "OpenOrchestra"

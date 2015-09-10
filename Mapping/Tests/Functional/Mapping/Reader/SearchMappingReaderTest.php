@@ -21,11 +21,6 @@ class SearchMappingReaderTest extends KernelTestCase
         $this->fakeClass = new FakeClassAnnotation();
 
         static::bootKernel();
-        $parameterKey = 'open_orchestra.annotation_search_reader';
-        $container = static::$kernel->getContainer();
-        if (!$container->hasParameter($parameterKey) || false === $container->getParameter($parameterKey)) {
-            $this->markTestSkipped('no service annotation reader');
-        }
         $this->readerSearch = static::$kernel->getContainer()->get('open_orchestra.annotation_search_reader');
     }
 
