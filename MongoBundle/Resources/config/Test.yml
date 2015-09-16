@@ -1,0 +1,5 @@
+OpenOrchestra\ModelBundle\Document\Test:
+    properties:
+        name:
+            key : yaml
+            type: string

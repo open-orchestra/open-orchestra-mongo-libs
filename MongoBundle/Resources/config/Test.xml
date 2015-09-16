@@ -1,0 +1,6 @@
+<search-mapping>
+    <class name="OpenOrchestra\ModelBundle\Document\Test">
+        <field field="name" key="name" type="string" />
+        <field field="tt" key="test" type="t" />
+    </class>
+</search-mapping>

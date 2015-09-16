@@ -42,19 +42,14 @@ class SearchMappingReaderTest extends KernelTestCase
             ),
             "fake_property_multi" =>array(
                 "key" => "fake_property_multi",
-                "field" => "fakePropery.embeded",
+                "field" => "fakeProperty2",
                 "type" => "string",
             )
         );
 
-        $mapping = $this->readerSearch->extractMapping($this->fakeClass);
+        $mapping = $this->readerSearch->extractMapping(get_class($this->fakeClass));
         $this->assertCount(3, $mapping);
-        foreach($mapping as $property => $searchAnnotation) {
-            $this->assertInstanceOf('OpenOrchestra\Mapping\Annotations\Search', $searchAnnotation);
-            foreach($mappingProperties[$property] as $key => $value ) {
-                $this->assertSame($value, $searchAnnotation->{'get'.$key}());
-            }
-        }
+        $this->assertSame($mapping, $mappingProperties);
     }
 }
 
@@ -73,8 +68,7 @@ class FakeClassAnnotation
     protected $fakeProperty1;
 
     /**
-     * @ORCHESTRA\Search(key="fake_property2")
-     * @ORCHESTRA\Search(key="fake_property_multi", field="fakePropery.embeded")
+     * @ORCHESTRA\Search(key="fake_property2,fake_property_multi")
      */
     protected $fakeProperty2;
 }

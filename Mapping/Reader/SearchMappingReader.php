@@ -2,22 +2,22 @@
 
 namespace OpenOrchestra\Mapping\Reader;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use OpenOrchestra\Mapping\Annotations\Search;
+use Metadata\MetadataFactoryInterface;
+use OpenOrchestra\Mapping\Metadata\PropertySearchMetadata;
 
 /**
  * Class SearchMappingReader
  */
 class SearchMappingReader
 {
-    protected $reader;
+    protected $metadataFactory;
 
     /**
-     * @param AnnotationReader $reader
+     * @param MetadataFactoryInterface $metadataFactory
      */
-    public function __construct(AnnotationReader $reader)
+    public function __construct(MetadataFactoryInterface $metadataFactory)
     {
-        $this->reader = $reader;
+        $this->metadataFactory = $metadataFactory;
     }
 
     /**
@@ -28,19 +28,25 @@ class SearchMappingReader
     public function extractMapping($class)
     {
         $mapping = array();
-        $class = new \ReflectionClass($class);
-        foreach ($class->getProperties() as $reflectionProperty) {
-            $annotations = $this->reader->getPropertyAnnotations($reflectionProperty);
-               foreach($annotations as $annotation) {
-                   if ($annotation instanceof Search && null !== $annotation->getKey()) {
-                       if (null === $annotation->getField()) {
-                           $annotation->setField($reflectionProperty->getName());
-                       }
-                       $mapping[$annotation->getKey()] = $annotation;
-                   }
-               }
-            }
+        $classMetadata = $this->metadataFactory->getMetadataForClass($class);
+        foreach ($classMetadata->propertyMetadata as $propertyMetadata) {
+            $mapping[$propertyMetadata->key] = $this->transformPropertyMetadataToArray($propertyMetadata);
+        }
 
         return $mapping;
+    }
+
+    /**
+     * @param PropertySearchMetadata $propertyMetadata
+     *
+     * @return array
+     */
+    protected function transformPropertyMetadataToArray(PropertySearchMetadata $propertyMetadata)
+    {
+        return array (
+            "key" => $propertyMetadata->key,
+            "field" => $propertyMetadata->field,
+            "type" => $propertyMetadata->type,
+        );
     }
 }
