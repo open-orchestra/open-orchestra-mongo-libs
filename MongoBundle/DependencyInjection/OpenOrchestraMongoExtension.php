@@ -29,8 +29,10 @@ class OpenOrchestraMongoExtension extends Extension
         //cache metadata
         $cacheDirectory = $config['search_metadata']['cache_dir'];
         $cacheDirectory = $container->getParameterBag()->resolveValue($cacheDirectory);
-        if (!is_dir($cacheDirectory)) {
-            mkdir($cacheDirectory, 0777, true);
+        if (!file_exists($cacheDirectory)) {
+            if (!$rs = @mkdir($cacheDirectory, 0777, true)) {
+                throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDirectory));
+            }
         }
 
         $container->getDefinition('open_orchestra.annotation_cache')

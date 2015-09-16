@@ -15,12 +15,13 @@ class XmlDriverTest extends AbstractDriverTest
      */
     public function setUp()
     {
+        parent::setUp();
         $dirs = array('OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver\FakeClass' => __DIR__ . '/xml');
         $fileLocaltor = new FileLocator($dirs);
 
         $this->driver = new XmlDriver($fileLocaltor,
-            $this->propertySearchMetadataClass,
-            $this->mergeableClassMetadataClass
+            $this->propertySearchMetadataFactory,
+            $this->mergeableClassMetadataFactory
         );
     }
 }

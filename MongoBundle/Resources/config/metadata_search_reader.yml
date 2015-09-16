@@ -8,9 +8,9 @@ parameters:
     open_orchestra.annotation_search.annotation_driver.class: OpenOrchestra\Mapping\Metadata\Driver\AnnotationDriver
     open_orchestra.annotation_search.yaml_driver.class: OpenOrchestra\Mapping\Metadata\Driver\YamlDriver
     open_orchestra.annotation_search.xml_driver.class: OpenOrchestra\Mapping\Metadata\Driver\XmlDriver
-    open_orchestra.annotation_search.property_search_metadata.class: OpenOrchestra\Mapping\Metadata\PropertySearchMetadata
-    open_orchestra.annotation_search.mergeable_class_metadata.class: Metadata\MergeableClassMetadata
     open_orchestra.annotation_search.driver_chain.class: Metadata\Driver\DriverChain
+    open_orchestra.annotation_search.mergeable_class_metadata_factory.class: OpenOrchestra\Mapping\Metadata\MergeableClassMetadataFactory
+    open_orchestra.annotation_search.property_search_metadata_factory.class: OpenOrchestra\Mapping\Metadata\PropertySearchMetadataFactory
 
 services:
     open_orchestra.annotation_reader:
@@ -23,25 +23,29 @@ services:
         class: %open_orchestra.annotation_cache.class%
         arguments:
             - []
+    open_orchestra.annotation_search.mergeable_class_metadata_factory:
+        class: %open_orchestra.annotation_search.mergeable_class_metadata_factory.class%
+    open_orchestra.annotation_search.property_search_metadata_factory:
+        class: %open_orchestra.annotation_search.property_search_metadata_factory.class%
     open_orchestra.annotation_search.annotation_driver:
         class: %open_orchestra.annotation_search.annotation_driver.class%
         arguments:
             - @open_orchestra.annotation_reader
-            - %open_orchestra.annotation_search.property_search_metadata.class%
-            - %open_orchestra.annotation_search.mergeable_class_metadata.class%
+            - @open_orchestra.annotation_search.property_search_metadata_factory
+            - @open_orchestra.annotation_search.mergeable_class_metadata_factory
             - %open_orchestra.annotation_search.class%
     open_orchestra.annotation_search.yaml_driver:
         class: %open_orchestra.annotation_search.yaml_driver.class%
         arguments:
             - @open_orchestra.annotation_file_locator
-            - %open_orchestra.annotation_search.property_search_metadata.class%
-            - %open_orchestra.annotation_search.mergeable_class_metadata.class%
+            - @open_orchestra.annotation_search.property_search_metadata_factory
+            - @open_orchestra.annotation_search.mergeable_class_metadata_factory
     open_orchestra.annotation_search.xml_driver:
         class: %open_orchestra.annotation_search.xml_driver.class%
         arguments:
             - @open_orchestra.annotation_file_locator
-            - %open_orchestra.annotation_search.property_search_metadata.class%
-            - %open_orchestra.annotation_search.mergeable_class_metadata.class%
+            - @open_orchestra.annotation_search.property_search_metadata_factory
+            - @open_orchestra.annotation_search.mergeable_class_metadata_factory
     open_orchestra.annotation_search.driver_chain:
         class: %open_orchestra.annotation_search.driver_chain.class%
         arguments:

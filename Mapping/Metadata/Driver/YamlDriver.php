@@ -2,28 +2,10 @@
 
 namespace OpenOrchestra\Mapping\Metadata\Driver;
 
-use Metadata\Driver\AbstractFileDriver;
-use Metadata\Driver\FileLocatorInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlDriver extends AbstractFileDriver
+class YamlDriver extends AbstractFileDriverSearch
 {
-    protected $propertySearchMetadataClass;
-    protected $mergeableClassMetadata;
-
-    /**
-     * @param FileLocatorInterface $locator
-     * @param string               $propertySearchMetadataClass
-     * @param string               $mergeableClassMetadata
-     */
-    public function __construct(FileLocatorInterface $locator, $propertySearchMetadataClass, $mergeableClassMetadata)
-    {
-        parent::__construct($locator);
-        $this->propertySearchMetadataClass = $propertySearchMetadataClass;
-        $this->mergeableClassMetadata = $mergeableClassMetadata;
-    }
-
-
     /**
      * @param \ReflectionClass $class
      * @param string           $file
@@ -34,10 +16,10 @@ class YamlDriver extends AbstractFileDriver
     {
         $data = Yaml::parse($file);
         if (isset($data[$class->getName()]) && isset($data[$class->getName()]["properties"])) {
-            $classMetadata = new $this->mergeableClassMetadata($class->getName());
+            $classMetadata = $this->mergeableClassMetadataFactory->create($class->getName());
 
             foreach ($data[$class->getName()]["properties"] as $field => $property) {
-                $propertyMetadata = new $this->propertySearchMetadataClass($class->getName(), $field);
+                $propertyMetadata = $this->propertySearchMetadataFactory->create($class->getName(), $field);
                 $propertyMetadata->key = $property["key"];
                 $propertyMetadata->type = isset($property["type"])? $property["type"]: "string";
                 $propertyMetadata->field = $field;

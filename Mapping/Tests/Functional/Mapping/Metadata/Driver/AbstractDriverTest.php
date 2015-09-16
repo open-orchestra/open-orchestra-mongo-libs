@@ -5,6 +5,8 @@ namespace OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver;
 use Metadata\PropertyMetadata;
 use Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
+use OpenOrchestra\Mapping\Metadata\MergeableClassMetadataFactory;
+use OpenOrchestra\Mapping\Metadata\PropertySearchMetadataFactory;
 use OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver\FakeClass\FakeClassMetadata;
 use OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver\FakeClass\FakeClassWithOutMetadata;
 
@@ -17,8 +19,14 @@ abstract class AbstractDriverTest extends \PHPUnit_Framework_TestCase
      * @var DriverInterface
      */
     protected $driver;
-    protected $propertySearchMetadataClass = 'OpenOrchestra\Mapping\Metadata\PropertySearchMetadata';
-    protected $mergeableClassMetadataClass = 'Metadata\MergeableClassMetadata';
+    protected $propertySearchMetadataFactory;
+    protected $mergeableClassMetadataFactory;
+
+    public function setUp()
+    {
+        $this->propertySearchMetadataFactory = new PropertySearchMetadataFactory();
+        $this->propertySearchMetadataFactory = new MergeableClassMetadataFactory();
+    }
 
     /**
      * Test LoadMetadataForClass with out search metadata

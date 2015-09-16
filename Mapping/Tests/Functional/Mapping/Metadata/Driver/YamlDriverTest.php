@@ -15,12 +15,13 @@ class YamlDriverTest extends AbstractDriverTest
      */
     public function setUp()
     {
+        parent::setUp();
         $dirs = array('OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver\FakeClass' => __DIR__ . '/yml');
-        $fileLocaltor = new FileLocator($dirs);
+        $fileLocator = new FileLocator($dirs);
 
-        $this->driver = new YamlDriver($fileLocaltor,
-            $this->propertySearchMetadataClass,
-            $this->mergeableClassMetadataClass
+        $this->driver = new YamlDriver($fileLocator,
+            $this->propertySearchMetadataFactory,
+            $this->mergeableClassMetadataFactory
         );
     }
 }

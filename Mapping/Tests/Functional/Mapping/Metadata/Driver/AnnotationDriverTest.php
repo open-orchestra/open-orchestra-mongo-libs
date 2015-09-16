@@ -20,11 +20,12 @@ class AnnotationDriverTest extends AbstractDriverTest
      */
     public function setUp()
     {
+        parent::setUp();
         $searchAnnotationClass = 'OpenOrchestra\Mapping\Annotations\Search';
         $this->driver = new AnnotationDriver(
             new AnnotationReader(),
-            $this->propertySearchMetadataClass,
-            $this->mergeableClassMetadataClass,
+            $this->propertySearchMetadataFactory,
+            $this->mergeableClassMetadataFactory,
             $searchAnnotationClass
         );
     }

@@ -4,6 +4,8 @@ namespace OpenOrchestra\Mapping\Metadata\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Metadata\Driver\DriverInterface;
+use OpenOrchestra\Mapping\Metadata\MergeableClassMetadataFactoryInterface;
+use OpenOrchestra\Mapping\Metadata\PropertySearchMetadataFactoryInterface;
 
 /**
  * Class AnnotationDriver
@@ -11,21 +13,26 @@ use Metadata\Driver\DriverInterface;
 class AnnotationDriver implements DriverInterface
 {
     protected $reader;
-    protected $propertySearchMetadataClass;
-    protected $mergeableClassMetadata;
+    protected $propertySearchMetadataClassFactory;
+    protected $mergeableClassMetadataFactory;
     protected $annotationClass;
 
     /**
-     * @param AnnotationReader $reader
-     * @param string           $propertySearchMetadataClass
-     * @param string           $mergeableClassMetadata
-     * @param string           $annotationClass
+     * @param AnnotationReader                       $reader
+     * @param PropertySearchMetadataFactoryInterface $propertySearchMetadataFactory
+     * @param MergeableClassMetadataFactoryInterface $mergeableClassMetadataFactory
+     * @param string                                 $annotationClass
      */
-    public function __construct(AnnotationReader $reader, $propertySearchMetadataClass, $mergeableClassMetadata, $annotationClass)
+    public function __construct(
+        AnnotationReader $reader,
+        PropertySearchMetadataFactoryInterface $propertySearchMetadataFactory,
+        MergeableClassMetadataFactoryInterface $mergeableClassMetadataFactory,
+        $annotationClass
+    )
     {
         $this->reader = $reader;
-        $this->propertySearchMetadataClass = $propertySearchMetadataClass;
-        $this->mergeableClassMetadata = $mergeableClassMetadata;
+        $this->propertySearchMetadataFactory = $propertySearchMetadataFactory;
+        $this->mergeableClassMetadataFactory = $mergeableClassMetadataFactory;
         $this->annotationClass = $annotationClass;
     }
 
@@ -36,11 +43,10 @@ class AnnotationDriver implements DriverInterface
      */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
-
-        $classMetadata = new $this->mergeableClassMetadata($class->getName());
+        $classMetadata = $this->mergeableClassMetadataFactory->create($class->getName());
         $existAnnotation = false;
         foreach ($class->getProperties() as $reflectionProperty) {
-            $propertyMetadata = new $this->propertySearchMetadataClass($class->getName(), $reflectionProperty->getName());
+            $propertyMetadata = $this->propertySearchMetadataFactory->create($class->getName(), $reflectionProperty->getName());
 
             $annotations = $this->reader->getPropertyAnnotations(
                 $reflectionProperty,
@@ -49,7 +55,7 @@ class AnnotationDriver implements DriverInterface
 
             if (!empty($annotations)) {
                 $existAnnotation = true;
-                foreach($annotations as $annotation) {
+                foreach ($annotations as $annotation) {
                     if (get_class($annotation) == $this->annotationClass) {
                         $propertyMetadata->key = $annotation->getKey();
                         $propertyMetadata->type = $annotation->getType();
@@ -66,5 +72,4 @@ class AnnotationDriver implements DriverInterface
 
         return (true === $existAnnotation) ? $classMetadata : null;
     }
-
 }
