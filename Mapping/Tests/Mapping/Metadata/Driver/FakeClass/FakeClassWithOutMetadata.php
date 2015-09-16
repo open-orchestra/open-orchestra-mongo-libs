@@ -11,4 +11,3 @@ class FakeClassWithOutMetadata
 
     protected $fakeProperty2;
 }
-
