@@ -10,7 +10,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "symfony/http-foundation": "*"
+    "symfony/http-foundation": "*",
+    "jms/metadata": "~1.1"
   },
   "require-dev": {
     "doctrine/mongodb-odm": "1.0.2",

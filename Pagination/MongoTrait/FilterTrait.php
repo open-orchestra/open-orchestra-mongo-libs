@@ -81,8 +81,8 @@ trait FilterTrait
 
         if (null !== $searchGlobal) {
             foreach ($descriptionEntity as $column) {
-                $name = $column->getField();
-                $type = $column->getType();
+                $name = $column['field'];
+                $type = $column['type'];
                 $searchFilter = $this->generateFilterSearchField($name, $searchGlobal, $type);
                 if (null !== $searchFilter) {
                     $filtersAll[] = $searchFilter;
@@ -105,10 +105,10 @@ trait FilterTrait
 
         if (null !== $searchColumns) {
             foreach ($searchColumns as $columnsName => $value) {
-                if (isset($descriptionEntity[$columnsName]) && null !== $descriptionEntity[$columnsName]->getField()) {
+                if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['field'])) {
                     $descriptionAttribute = $descriptionEntity[$columnsName];
-                    $name = $descriptionAttribute->getField();
-                    $type = $descriptionAttribute->getType();
+                    $name = $descriptionAttribute['field'];
+                    $type = $descriptionAttribute['type'];
 
                     if (!empty($name)) {
                         $searchfilter = $this->generateFilterSearchField($name, $value, $type);
@@ -148,8 +148,8 @@ trait FilterTrait
     {
         if (null !== $order) {
             $columnsName = $order['name'];
-            if (isset($descriptionEntity[$columnsName]) && null !== $descriptionEntity[$columnsName]->getField()) {
-                $name = $descriptionEntity[$columnsName]->getField();
+            if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['field'])) {
+                $name = $descriptionEntity[$columnsName]['field'];
                 $dir = ($order['dir'] == 'desc') ? -1 : 1;
                 $qa->sort(array($name => $dir));
             }

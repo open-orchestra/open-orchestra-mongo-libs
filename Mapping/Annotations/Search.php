@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Search extends Annotation
 {
-    protected $key;
+    protected $key = array();
     protected $field;
     protected $type = 'string';
 
