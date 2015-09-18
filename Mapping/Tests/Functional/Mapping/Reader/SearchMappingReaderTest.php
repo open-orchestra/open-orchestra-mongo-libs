@@ -68,7 +68,7 @@ class FakeClassAnnotation
     protected $fakeProperty1;
 
     /**
-     * @ORCHESTRA\Search(key="fake_property2,fake_property_multi")
+     * @ORCHESTRA\Search(key={"fake_property2", "fake_property_multi"})
      */
     protected $fakeProperty2;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\Mapping\Tests\Mapping\Metadata\Driver\FakeClass;
+namespace OpenOrchestra\Mapping\Tests\Functional\Mapping\Metadata\Driver\FakeClass;
 
 use OpenOrchestra\Mapping\Annotations as ORCHESTRA;
 
