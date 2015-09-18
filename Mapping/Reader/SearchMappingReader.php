@@ -30,23 +30,29 @@ class SearchMappingReader
         $mapping = array();
         $classMetadata = $this->metadataFactory->getMetadataForClass($class);
         foreach ($classMetadata->propertyMetadata as $propertyMetadata) {
-            $mapping[$propertyMetadata->key] = $this->transformPropertyMetadataToArray($propertyMetadata);
+            if (is_array($propertyMetadata->key)) {
+                foreach ($propertyMetadata->key as $key) {
+                    $mapping[$key] = $this->transformPropertyMetadataToArray($key, $propertyMetadata);
+                }
+            } else {
+                $mapping[$propertyMetadata->key] = $this->transformPropertyMetadataToArray($propertyMetadata->key, $propertyMetadata);
+            }
         }
-
         return $mapping;
     }
 
     /**
+     * @param string                 $key
      * @param PropertySearchMetadata $propertyMetadata
      *
      * @return array
      */
-    protected function transformPropertyMetadataToArray(PropertySearchMetadata $propertyMetadata)
+    protected function transformPropertyMetadataToArray($key, PropertySearchMetadata $propertyMetadata)
     {
         return array (
-            "key" => $propertyMetadata->key,
+            "key"   => $key,
             "field" => $propertyMetadata->field,
-            "type" => $propertyMetadata->type,
+            "type"  => $propertyMetadata->type,
         );
     }
 }
