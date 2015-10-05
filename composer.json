@@ -26,13 +26,12 @@
     "bin-dir" : "bin"
   },
   "autoload": {
-    "psr-0": {
-      "OpenOrchestra\\Mapping": "",
-      "OpenOrchestra\\Pagination": "",
-      "OpenOrchestra\\MongoTrait": "",
-      "OpenOrchestra\\Repository": "",
-      "OpenOrchestra\\MongoBundle": ""
+    "psr-4": {
+      "OpenOrchestra\\Mapping\\": "Mapping/",
+      "OpenOrchestra\\Pagination\\": "Pagination/",
+      "OpenOrchestra\\MongoTrait\\": "MongoTrait/",
+      "OpenOrchestra\\Repository\\": "Repository/",
+      "OpenOrchestra\\MongoBundle\\": "MongoBundle/"
     }
-  },
-  "target-dir": "OpenOrchestra"
+  }
 }
