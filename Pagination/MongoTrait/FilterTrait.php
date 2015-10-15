@@ -140,7 +140,7 @@ trait FilterTrait
     }
 
     /**
-     * @param array|null  $order
+     * @param PaginateFinderConfiguration $configuration
      *
      * @return Array
      */
@@ -153,7 +153,7 @@ trait FilterTrait
             $configuration->getDescriptionEntity(),
             false
         );
-        foreach($sorts as $key => $name) {
+        foreach ($sorts as $key => $name) {
             $group = array_merge($group, array(
                 $key => array(
                     '$last' => '$'.$name
@@ -166,6 +166,7 @@ trait FilterTrait
     /**
      * @param array|null  $order
      * @param array|null  $descriptionEntity
+     * @param boolean     $returnOrder
      *
      * @return Array
      */
