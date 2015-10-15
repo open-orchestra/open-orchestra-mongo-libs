@@ -164,9 +164,9 @@ trait FilterTrait
     }
 
     /**
-     * @param array|null  $order
-     * @param array|null  $descriptionEntity
-     * @param boolean     $returnOrder
+     * @param array|null $order
+     * @param array|null $descriptionEntity
+     * @param boolean    $returnOrder
      *
      * @return Array
      */
@@ -194,15 +194,18 @@ trait FilterTrait
     }
 
     /**
-     * @param Stage       $qa
-     * @param array|null  $order
-     * @param array|null  $descriptionEntity
+     * @param Stage      $qa
+     * @param array|null $order
+     * @param array|null $descriptionEntity
      *
      * @return Stage
      */
     protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null)
     {
-        $qa->sort($this->generateArrayForFilterSort($order, $descriptionEntity));
+        $sortArgs = $this->generateArrayForFilterSort($order, $descriptionEntity);
+        if (!empty($sortArgs)) {
+            $qa->sort($sortArgs);
+        }
 
         return $qa;
     }
