@@ -174,6 +174,7 @@ trait FilterTrait
         if (null !== $order) {
             $columnsName = $order['name'];
             if (isset($descriptionEntity[$columnsName])){
+                $key = '';
                 if ($descriptionEntity[$columnsName] instanceof Search) {
                     $key = $descriptionEntity[$columnsName]->getField();
                 } elseif (isset($descriptionEntity[$columnsName]['field'])) {
