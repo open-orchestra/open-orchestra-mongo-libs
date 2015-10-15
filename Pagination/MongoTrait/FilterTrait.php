@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
+use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
 use OpenOrchestra\Mapping\Annotations\Search;
@@ -140,9 +141,33 @@ trait FilterTrait
 
     /**
      * @param array|null  $order
+     *
+     * @return Array
+     */
+    protected function generateGroupForFilterSort(PaginateFinderConfiguration $configuration)
+    {
+        $group = array();
+
+        $sorts = $this->generateArrayForFilterSort(
+            $configuration->getOrder(),
+            $configuration->getDescriptionEntity(),
+            false
+        );
+        foreach($sorts as $key => $name) {
+            $group = array_merge($group, array(
+                $key => array(
+                    '$last' => '$'.$name
+                )));
+        }
+
+        return $group;
+    }
+
+    /**
+     * @param array|null  $order
      * @param array|null  $descriptionEntity
      *
-     * @return Stage
+     * @return Array
      */
     protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true)
     {
@@ -150,21 +175,22 @@ trait FilterTrait
             $columnsName = $order['name'];
             if (isset($descriptionEntity[$columnsName])){
                 if($descriptionEntity[$columnsName] instanceof Search) {
-                    $name = $descriptionEntity[$columnsName]->getField();
+                    $key = $descriptionEntity[$columnsName]->getField();
                 } elseif (isset($descriptionEntity[$columnsName]['field'])) {
-                    $name = $descriptionEntity[$columnsName]['field'];
+                    $key = $descriptionEntity[$columnsName]['field'];
                 }
-                $dir = $name;
+                $value = $key;
                 if ($returnOrder) {
-                    $dir = ($order['dir'] == 'desc') ? -1 : 1;
+                    $value = ($order['dir'] == 'desc') ? -1 : 1;
                 }
-                return array(str_replace('.', '_', $name) => $dir);
+
+                return array(str_replace('.', '_', $key) => $value);
             }
         }
-        
+
         return array();
     }
-    
+
     /**
      * @param Stage       $qa
      * @param array|null  $order
