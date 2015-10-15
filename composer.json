@@ -1,6 +1,6 @@
 {
-  "name": "open-orchestra/open-orchestra-libs",
-  "description": "Some library for the Open Orchestra project",
+  "name": "open-orchestra/open-orchestra-mongo-libs",
+  "description": "Some library to use the Open Orchestra project with mongo",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -10,13 +10,14 @@
   ],
   "minimum-stability": "dev",
   "require": {
+    "open-orchestra/open-orchestra-libs": "*",
+    "doctrine/mongodb-odm": "1.0.2",
+    "doctrine/mongodb-odm-bundle" : "3.0.1",
+    "solution/mongo-odm-aggregation-bundle": "*",
     "symfony/http-foundation": "*",
     "jms/metadata": "~1.1"
   },
   "require-dev": {
-    "doctrine/mongodb-odm": "1.0.2",
-    "doctrine/mongodb-odm-bundle" : "3.0.1",
-    "solution/mongo-odm-aggregation-bundle": "*",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
@@ -27,7 +28,6 @@
   },
   "autoload": {
     "psr-4": {
-      "OpenOrchestra\\Mapping\\": "Mapping/",
       "OpenOrchestra\\Pagination\\": "Pagination/",
       "OpenOrchestra\\MongoTrait\\": "MongoTrait/",
       "OpenOrchestra\\Repository\\": "Repository/",
