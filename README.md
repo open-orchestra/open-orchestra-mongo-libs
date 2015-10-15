@@ -1,5 +1,5 @@
-open-orchestra-libs
-===================
+open-orchestra-mongo-libs
+=========================
 
 | Service       | Badge         |
 | ------------- |:-------------:|
