@@ -3,8 +3,10 @@
 namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
+use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
+use OpenOrchestra\Mapping\Annotations\Search;
 
 /**
  * Trait FilterTrait
@@ -138,6 +140,60 @@ trait FilterTrait
     }
 
     /**
+     * @param PaginateFinderConfiguration $configuration
+     *
+     * @return Array
+     */
+    protected function generateGroupForFilterSort(PaginateFinderConfiguration $configuration)
+    {
+        $group = array();
+
+        $sorts = $this->generateArrayForFilterSort(
+            $configuration->getOrder(),
+            $configuration->getDescriptionEntity(),
+            false
+        );
+        foreach ($sorts as $key => $name) {
+            $group = array_merge($group, array(
+                $key => array(
+                    '$last' => '$'.$name
+                )));
+        }
+
+        return $group;
+    }
+
+    /**
+     * @param array|null  $order
+     * @param array|null  $descriptionEntity
+     * @param boolean     $returnOrder
+     *
+     * @return Array
+     */
+    protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true)
+    {
+        if (null !== $order) {
+            $columnsName = $order['name'];
+            if (isset($descriptionEntity[$columnsName])){
+                $key = '';
+                if ($descriptionEntity[$columnsName] instanceof Search) {
+                    $key = $descriptionEntity[$columnsName]->getField();
+                } elseif (isset($descriptionEntity[$columnsName]['field'])) {
+                    $key = $descriptionEntity[$columnsName]['field'];
+                }
+                $value = $key;
+                if ($returnOrder) {
+                    $value = ($order['dir'] == 'desc') ? -1 : 1;
+                }
+
+                return array(str_replace('.', '_', $key) => $value);
+            }
+        }
+
+        return array();
+    }
+
+    /**
      * @param Stage       $qa
      * @param array|null  $order
      * @param array|null  $descriptionEntity
@@ -146,14 +202,7 @@ trait FilterTrait
      */
     protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null)
     {
-        if (null !== $order) {
-            $columnsName = $order['name'];
-            if (isset($descriptionEntity[$columnsName]) && isset($descriptionEntity[$columnsName]['field'])) {
-                $name = $descriptionEntity[$columnsName]['field'];
-                $dir = ($order['dir'] == 'desc') ? -1 : 1;
-                $qa->sort(array($name => $dir));
-            }
-        }
+        $qa->sort($this->generateArrayForFilterSort($order, $descriptionEntity));
 
         return $qa;
     }
