@@ -79,7 +79,7 @@ class DateFilterStrategyTest extends \PHPUnit_Framework_TestCase
     public function testGenerateFilterWithoutHour()
     {
         $name = 'fakeName';
-        $date  = '"2015-10-21"';
+        $date  = "2015-10-21";
         $dateGte =  new MongoDate(strtotime($date));
         $dateLt =  new MongoDate(strtotime($date.' + 1 DAY'));
         $filter = $this->strategy->generateFilter($name, $date, 'fakeDocumentName');
