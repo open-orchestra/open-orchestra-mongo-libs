@@ -111,7 +111,6 @@ trait FilterTrait
                     $descriptionAttribute = $descriptionEntity[$columnsName];
                     $name = $descriptionAttribute['field'];
                     $type = $descriptionAttribute['type'];
-
                     if (!empty($name)) {
                         $searchfilter = $this->generateFilterSearchField($name, $value, $type);
                         if (null !== $searchfilter) {

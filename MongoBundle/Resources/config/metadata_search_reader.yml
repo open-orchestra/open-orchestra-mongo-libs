@@ -49,7 +49,7 @@ services:
     open_orchestra.annotation_search.driver_chain:
         class: %open_orchestra.annotation_search.driver_chain.class%
         arguments:
-            - [@open_orchestra.annotation_search.annotation_driver, @open_orchestra.annotation_search.yaml_driver, @open_orchestra.annotation_search.xml_driver]
+            - [@open_orchestra.annotation_search.yaml_driver, @open_orchestra.annotation_search.xml_driver, @open_orchestra.annotation_search.annotation_driver]
     open_orchestra.annotation_search.metadata_factory:
         class: %open_orchestra.annotation_search.metadata_factory.class%
         arguments:
