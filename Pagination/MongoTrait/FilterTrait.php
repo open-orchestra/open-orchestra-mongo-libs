@@ -6,7 +6,6 @@ use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
-use OpenOrchestra\Mapping\Annotations\Search;
 
 /**
  * Trait FilterTrait
@@ -175,12 +174,7 @@ trait FilterTrait
         if (null !== $order) {
             $columnsName = $order['name'];
             if (isset($descriptionEntity[$columnsName])){
-                $key = '';
-                if ($descriptionEntity[$columnsName] instanceof Search) {
-                    $key = $descriptionEntity[$columnsName]->getField();
-                } elseif (isset($descriptionEntity[$columnsName]['field'])) {
-                    $key = $descriptionEntity[$columnsName]['field'];
-                }
+                $key = $descriptionEntity[$columnsName]['field'];
                 $value = $key;
                 if ($returnOrder) {
                     $value = ($order['dir'] == 'desc') ? -1 : 1;
