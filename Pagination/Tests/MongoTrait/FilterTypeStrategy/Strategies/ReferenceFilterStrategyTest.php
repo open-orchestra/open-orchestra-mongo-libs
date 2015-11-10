@@ -34,20 +34,20 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Repository\AbstractAggregateRepository');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
-        $status0 = Phake::mock('OpenOrchestra\ModelInterface\Model\StatusInterface');
-        $status1 = Phake::mock('OpenOrchestra\ModelInterface\Model\StatusInterface');
+        $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
+        $getId1 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
 
         $referencedDocuments = new ArrayCollection();
-        $referencedDocuments->add($status0);
-        $referencedDocuments->add($status1);
+        $referencedDocuments->add($getId0);
+        $referencedDocuments->add($getId1);
 
         Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $targetDocument));
         Phake::when($searchMappingReader)->extractMapping($targetDocument)->thenReturn($mapping);
         Phake::when($documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
         Phake::when($documentManager)->getRepository($targetDocument)->thenReturn($repository);
-        Phake::when($status0)->getId()->thenReturn($this->id0);
-        Phake::when($status1)->getId()->thenReturn($this->id1);
+        Phake::when($getId0)->getId()->thenReturn($this->id0);
+        Phake::when($getId1)->getId()->thenReturn($this->id1);
         Phake::when($repository)->findForPaginate(Phake::anyParameters())->thenReturn($referencedDocuments);
 
         $this->strategy = new ReferenceFilterStrategy($documentManager, $searchMappingReader, $aggregationQueryBuilder, $filterTypeManager);
@@ -117,4 +117,16 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('reference_filter', $this->strategy->getName());
     }
+}
+
+
+/**
+ * Interface PhakeGetIdInterface
+ */
+interface PhakeGetIdInterface
+{
+    /**
+     * @return string
+     */
+    public function getId();
 }
