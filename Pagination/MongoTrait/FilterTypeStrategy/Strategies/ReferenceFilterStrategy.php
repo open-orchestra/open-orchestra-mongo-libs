@@ -4,7 +4,6 @@ namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
-use Doctrine\MongoDB\Database;
 use OpenOrchestra\Mapping\Reader\SearchMappingReader;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder;
