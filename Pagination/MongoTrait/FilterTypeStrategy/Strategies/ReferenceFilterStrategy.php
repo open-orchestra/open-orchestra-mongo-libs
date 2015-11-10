@@ -8,6 +8,7 @@ use OpenOrchestra\Mapping\Reader\SearchMappingReader;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder;
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
+use OpenOrchestra\Repository\AbstractAggregateRepository;
 
 /**
  * Class ReferenceFilterStrategy
@@ -57,7 +58,7 @@ class ReferenceFilterStrategy implements FilterTypeInterface
     public function generateFilter($name, $value, $documentName)
     {
         $columnsTree = explode('.', $name);
-        if(count($columnsTree) == 2) {
+        if (2 == count($columnsTree)) {
             list($property, $referenceProperty) = $columnsTree;
 
             $metadata = $this->documentManager->getClassMetadata($documentName);
@@ -66,19 +67,22 @@ class ReferenceFilterStrategy implements FilterTypeInterface
             $mapping = $this->searchMappingReader->extractMapping($targetDocument);
 
             $repository = $this->documentManager->getRepository($targetDocument);
-            $repository->setAggregationQueryBuilder($this->aggregationQueryBuilder);
-            $repository->setFilterTypeManager($this->filterTypeManager);
 
-            $configuration = PaginateFinderConfiguration::generateFromVariable($mapping, array('columns' => array($referenceProperty => $value)));
+            if ($repository instanceof AbstractAggregateRepository && method_exists($repository, 'findForPaginate')) {
+                $repository->setAggregationQueryBuilder($this->aggregationQueryBuilder);
+                $repository->setFilterTypeManager($this->filterTypeManager);
 
-            $filter = array();
-            $referenceds = $repository->findForPaginate($configuration);
-            foreach ($referenceds as $referenced) {
-                $filter[] = array($property.'.$id' => new \MongoId($referenced->getId()));
-            }
+                $configuration = PaginateFinderConfiguration::generateFromVariable($mapping, array('columns' => array($referenceProperty => $value)));
 
-            if (count($filter) > 0) {
-                return array('$or' => $filter);
+                $filter = array();
+                $referenceds = $repository->findForPaginate($configuration);
+                foreach ($referenceds as $referenced) {
+                    $filter[] = array($property.'.$id' => new \MongoId($referenced->getId()));
+                }
+
+                if (count($filter) > 0) {
+                    return array('$or' => $filter);
+                }
             }
         }
 

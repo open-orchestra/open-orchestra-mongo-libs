@@ -5,6 +5,8 @@ namespace OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategie
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\ReferenceFilterStrategy;
 use Phake;
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\Repository\AbstractAggregateRepository;
+use OpenOrchestra\Pagination\MongoTrait\PaginationTrait;
 
 /**
  * Class ReferenceFilterStrategyTest
@@ -32,7 +34,8 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $searchMappingReader = Phake::mock('OpenOrchestra\Mapping\Reader\SearchMappingReader');
         $aggregationQueryBuilder = Phake::mock('Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder');
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
-        $repository = Phake::mock('OpenOrchestra\Repository\AbstractAggregateRepository');
+        $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepository');
+
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
         $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $getId1 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
@@ -119,7 +122,6 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
 /**
  * Interface PhakeGetIdInterface
  */
@@ -129,4 +131,12 @@ interface PhakeGetIdInterface
      * @return string
      */
     public function getId();
+}
+
+/**
+ * class PhakeRepository
+ */
+class PhakeRepository extends AbstractAggregateRepository
+{
+    public function findForPaginate(){}
 }
