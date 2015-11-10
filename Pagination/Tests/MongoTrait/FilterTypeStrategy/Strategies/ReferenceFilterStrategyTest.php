@@ -34,8 +34,8 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Repository\AbstractAggregateRepository');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
-        $group0 = Phake::mock('FOS\UserBundle\Model\GroupInterface');
-        $group1 = Phake::mock('FOS\UserBundle\Model\GroupInterface');
+        $group0 = Phake::mock('OpenOrchestra\BackofficeBundle\Model\GroupInterface');
+        $group1 = Phake::mock('OpenOrchestra\BackofficeBundle\Model\GroupInterface');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
 
         $referencedDocuments = new ArrayCollection();
