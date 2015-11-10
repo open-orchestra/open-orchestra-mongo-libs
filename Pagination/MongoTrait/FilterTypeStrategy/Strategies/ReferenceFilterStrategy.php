@@ -76,50 +76,6 @@ class ReferenceFilterStrategy implements FilterTypeInterface
     }
 
     /**
-     * @param string   $key
-     * @param string   $value
-     * @param string   $collectionName
-     * @param Database $dataBase
-     *
-     * @return array
-     */
-    protected function generateCriteria($key, $value, $collectionName, $dataBase)
-    {
-        $map = new \MongoCode(
-            "function() {
-                    for (var key in eval('this.' + preColumn)) {
-                        emit(preColumn + '.' + key + '.' + postColumn, null);
-                    }
-            }"
-        );
-        $reduce = new \MongoCode("function(k, vals) {  return null; }");
-
-        preg_match('/(.*)\.\*.(.*)/',$key, $column);
-        $preColumnn = $column[1];
-        $postColumn = $column[2];
-
-        $commandResult = $dataBase->command(array(
-            "mapreduce" => $collectionName,
-            "map" => $map,
-            "reduce" => $reduce,
-            "out" => array("inline" => 1),
-            "scope" => array(
-                "preColumn" => "$preColumnn",
-                "postColumn" => "$postColumn"
-            )
-        ));
-
-        $criteria = array();
-        if (is_array($commandResult) && array_key_exists('ok', $commandResult ) && $commandResult['ok'] == 1) {
-            foreach ($commandResult['results'] as $filter) {
-                $criteria[] = array($filter['_id'] => $value);
-            }
-        }
-
-        return $criteria;
-    }
-
-    /**
      * @return string
      */
     public function getName()
