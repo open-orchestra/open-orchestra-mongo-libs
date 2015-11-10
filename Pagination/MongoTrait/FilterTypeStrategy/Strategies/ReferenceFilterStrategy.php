@@ -24,6 +24,7 @@ class ReferenceFilterStrategy implements FilterTypeInterface
      * @param DocumentManager         $documentManager
      * @param SearchMappingReader     $searchMappingReader
      * @param AggregationQueryBuilder $aggregationQueryBuilder
+     * @param FilterTypeManager       $filterTypeManager)
      */
     public function __construct(
         DocumentManager $documentManager,
@@ -56,21 +57,23 @@ class ReferenceFilterStrategy implements FilterTypeInterface
      */
     public function generateFilter($name, $value, $documentName)
     {
-
         $columnsTree = explode('.', $name);
         if(count($columnsTree) == 2) {
             list($property, $referenceProperty) = $columnsTree;
 
             $metadata = $this->documentManager->getClassMetadata($documentName);
-            $reference = $metadata->getFieldMapping($property);
-            $repository = $this->documentManager->getRepository($reference['targetDocument']);
+            $targetDocument = $metadata->getFieldMapping($property)['targetDocument'];
+
+            $mapping = $this->searchMappingReader->extractMapping($targetDocument);
+
+            $repository = $this->documentManager->getRepository($targetDocument);
             $repository->setAggregationQueryBuilder($this->aggregationQueryBuilder);
             $repository->setFilterTypeManager($this->filterTypeManager);
-            $mapping = $this->searchMappingReader->extractMapping($reference['targetDocument']);
+
             $configuration = PaginateFinderConfiguration::generateFromVariable($mapping, array('columns' => array($referenceProperty => $value)));
-            $referenceds = $repository->findForPaginate($configuration);
 
             $filter = array();
+            $referenceds = $repository->findForPaginate($configuration);
             foreach ($referenceds as $referenced) {
                 $filter[] = array($property.'.$id' => new \MongoId($referenced->getId()));
             }
@@ -78,8 +81,6 @@ class ReferenceFilterStrategy implements FilterTypeInterface
             if (count($filter) > 0) {
                 return array('$or' => $filter);
             }
-
-            return null;
         }
 
         return null;
