@@ -38,6 +38,8 @@ services:
         arguments:
             - @doctrine.odm.mongodb.document_manager
             - @open_orchestra.annotation_search_reader
+            - @doctrine_mongodb.odm.default_aggregation_query
+            - @open_orchestra_pagination.filter_type.manager
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
