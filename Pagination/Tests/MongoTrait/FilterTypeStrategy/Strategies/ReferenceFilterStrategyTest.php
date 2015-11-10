@@ -34,20 +34,20 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Repository\AbstractAggregateRepository');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
-        $group0 = Phake::mock('OpenOrchestra\BackofficeBundle\Model\GroupInterface');
-        $group1 = Phake::mock('OpenOrchestra\BackofficeBundle\Model\GroupInterface');
+        $status0 = Phake::mock('OpenOrchestra\ModelInterface\Model\StatusInterface');
+        $status1 = Phake::mock('OpenOrchestra\ModelInterface\Model\StatusInterface');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
 
         $referencedDocuments = new ArrayCollection();
-        $referencedDocuments->add($group0);
-        $referencedDocuments->add($group1);
+        $referencedDocuments->add($status0);
+        $referencedDocuments->add($status1);
 
         Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $targetDocument));
         Phake::when($searchMappingReader)->extractMapping($targetDocument)->thenReturn($mapping);
         Phake::when($documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
         Phake::when($documentManager)->getRepository($targetDocument)->thenReturn($repository);
-        Phake::when($group0)->getId()->thenReturn($this->id0);
-        Phake::when($group1)->getId()->thenReturn($this->id1);
+        Phake::when($status0)->getId()->thenReturn($this->id0);
+        Phake::when($status1)->getId()->thenReturn($this->id1);
         Phake::when($repository)->findForPaginate(Phake::anyParameters())->thenReturn($referencedDocuments);
 
         $this->strategy = new ReferenceFilterStrategy($documentManager, $searchMappingReader, $aggregationQueryBuilder, $filterTypeManager);
