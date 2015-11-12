@@ -4,6 +4,7 @@ parameters:
     open_orchestra_pagination.filter_type.integer_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\IntegerFilterStrategy
     open_orchestra_pagination.filter_type.boolean_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\BooleanFilterStrategy
     open_orchestra_pagination.filter_type.translated_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\TranslatedFilterStrategy
+    open_orchestra_pagination.filter_type.reference_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\ReferenceFilterStrategy
     open_orchestra_pagination.filter_type.date_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\DateFilterStrategy
 
 services:
@@ -29,6 +30,16 @@ services:
         class: %open_orchestra_pagination.filter_type.translated_filter.class%
         arguments:
             - @doctrine.odm.mongodb.document_manager
+        tags:
+            - { name: open_orchestra_pagination.filter_type.strategy }
+
+    open_orchestra_pagination.filter_type.reference_filter:
+        class: %open_orchestra_pagination.filter_type.reference_filter.class%
+        arguments:
+            - @doctrine.odm.mongodb.document_manager
+            - @open_orchestra.annotation_search_reader
+            - @doctrine_mongodb.odm.default_aggregation_query
+            - @open_orchestra_pagination.filter_type.manager
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
