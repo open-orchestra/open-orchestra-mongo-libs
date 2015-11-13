@@ -32,7 +32,7 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $documentManager = Phake::mock('Doctrine\ODM\MongoDB\DocumentManager');
         $searchMappingReader = Phake::mock('OpenOrchestra\Mapping\Reader\SearchMappingReader');
         $aggregationQueryBuilder = Phake::mock('Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder');
-        $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
+        $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\FilterType\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepository');
 
         $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');

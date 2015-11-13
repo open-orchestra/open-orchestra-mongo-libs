@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
+use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use MongoRegex;
 
 /**

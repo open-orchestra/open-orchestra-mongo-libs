@@ -4,7 +4,7 @@ namespace OpenOrchestra\Pagination\MongoTrait;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
+use OpenOrchestra\Pagination\FilterType\FilterTypeManager;
 use Solution\MongoAggregation\Pipeline\Stage;
 
 /**
@@ -141,7 +141,7 @@ trait FilterTrait
     /**
      * @param PaginateFinderConfiguration $configuration
      *
-     * @return Array
+     * @return array
      */
     protected function generateGroupForFilterSort(PaginateFinderConfiguration $configuration)
     {
@@ -167,7 +167,7 @@ trait FilterTrait
      * @param array|null $descriptionEntity
      * @param boolean    $returnOrder
      *
-     * @return Array
+     * @return array
      */
     protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true)
     {

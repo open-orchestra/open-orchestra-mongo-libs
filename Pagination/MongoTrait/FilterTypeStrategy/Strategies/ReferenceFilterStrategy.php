@@ -3,11 +3,11 @@
 namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
+use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use OpenOrchestra\Mapping\Reader\SearchMappingReader;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder;
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager;
+use OpenOrchestra\Pagination\FilterType\FilterTypeManager;
 use OpenOrchestra\Repository\AbstractAggregateRepository;
 
 /**
@@ -24,13 +24,14 @@ class ReferenceFilterStrategy implements FilterTypeInterface
      * @param DocumentManager         $documentManager
      * @param SearchMappingReader     $searchMappingReader
      * @param AggregationQueryBuilder $aggregationQueryBuilder
-     * @param FilterTypeManager       $filterTypeManager)
+     * @param FilterTypeManager       $filterTypeManager
      */
     public function __construct(
         DocumentManager $documentManager,
         SearchMappingReader $searchMappingReader,
         AggregationQueryBuilder $aggregationQueryBuilder,
-        FilterTypeManager $filterTypeManager)
+        FilterTypeManager $filterTypeManager
+    )
     {
         $this->documentManager = $documentManager;
         $this->searchMappingReader = $searchMappingReader;
