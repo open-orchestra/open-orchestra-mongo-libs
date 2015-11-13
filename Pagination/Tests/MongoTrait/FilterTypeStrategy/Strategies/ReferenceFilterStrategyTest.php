@@ -6,7 +6,6 @@ use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\ReferenceF
 use Phake;
 use Doctrine\Common\Collections\ArrayCollection;
 use OpenOrchestra\Repository\AbstractAggregateRepository;
-use OpenOrchestra\Pagination\MongoTrait\PaginationTrait;
 
 /**
  * Class ReferenceFilterStrategyTest
@@ -36,9 +35,9 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepository');
 
-        $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
         $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $getId1 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
+        $metadataFactory = Phake::mock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
 
         $referencedDocuments = new ArrayCollection();
@@ -47,7 +46,8 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
 
         Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $targetDocument));
         Phake::when($searchMappingReader)->extractMapping($targetDocument)->thenReturn($mapping);
-        Phake::when($documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
+        Phake::when($documentManager)->getMetadataFactory()->thenReturn($metadataFactory);
+        Phake::when($metadataFactory)->getMetadataFor($this->documentName)->thenReturn($metadata);
         Phake::when($documentManager)->getRepository($targetDocument)->thenReturn($repository);
         Phake::when($getId0)->getId()->thenReturn($this->id0);
         Phake::when($getId1)->getId()->thenReturn($this->id1);
