@@ -61,7 +61,7 @@ class ReferenceFilterStrategy implements FilterTypeInterface
         if (2 == count($columnsTree)) {
             list($property, $referenceProperty) = $columnsTree;
 
-            $metadata = $this->documentManager->getMetadataFactory()->getMetadataFor($documentName);
+            $metadata = $this->documentManager->getClassMetadata($documentName);
             $targetDocument = $metadata->getFieldMapping($property)['targetDocument'];
 
             $mapping = $this->searchMappingReader->extractMapping($targetDocument);
