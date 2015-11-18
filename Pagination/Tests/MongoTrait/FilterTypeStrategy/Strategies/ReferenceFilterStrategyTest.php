@@ -6,7 +6,6 @@ use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\ReferenceF
 use Phake;
 use Doctrine\Common\Collections\ArrayCollection;
 use OpenOrchestra\Repository\AbstractAggregateRepository;
-use OpenOrchestra\Pagination\MongoTrait\PaginationTrait;
 
 /**
  * Class ReferenceFilterStrategyTest
@@ -36,7 +35,6 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepository');
 
-        $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
         $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $getId1 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
