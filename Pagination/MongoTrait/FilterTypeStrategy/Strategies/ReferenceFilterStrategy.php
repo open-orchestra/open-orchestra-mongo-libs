@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
+use OpenOrchestra\Pagination\Configuration\PaginationRepositoryInterface;
 use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use OpenOrchestra\Mapping\Reader\SearchMappingReader;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
@@ -69,8 +70,11 @@ class ReferenceFilterStrategy implements FilterTypeInterface
 
             $repository = $this->documentManager->getRepository($targetDocument);
 
-            if ($repository instanceof AbstractAggregateRepository && method_exists($repository, 'findForPaginate')) {
+            if ($repository instanceof AbstractAggregateRepository) {
                 $repository->setAggregationQueryBuilder($this->aggregationQueryBuilder);
+            }
+
+            if ($repository instanceof PaginationRepositoryInterface) {
                 $repository->setFilterTypeManager($this->filterTypeManager);
 
                 $configuration = PaginateFinderConfiguration::generateFromVariable($mapping, array('columns' => array($referenceProperty => $value)));
