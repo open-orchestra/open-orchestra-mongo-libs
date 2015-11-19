@@ -72,6 +72,29 @@ class BooleanFilterStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param mixed $value
+     *
+     * @dataProvider provideWrongValue
+     */
+    public function testGenerateFilterWithWrongSearch($value)
+    {
+        $name = 'fakeName';
+        $this->assertNull($this->strategy->generateFilter($name, $value, 'fakeDocumentName'));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideWrongValue()
+    {
+        return array(
+            array('foo', null),
+            array('bar', null),
+            array(2, null),
+        );
+    }
+
+    /**
      * Test get name
      */
     public function testGetName()

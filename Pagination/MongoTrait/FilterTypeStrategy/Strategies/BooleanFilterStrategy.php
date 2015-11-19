@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
+use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 
 /**
  * Class BooleanFilterStrategy
@@ -28,10 +28,13 @@ class BooleanFilterStrategy implements FilterTypeInterface
      */
     public function generateFilter($name, $value, $documentName)
     {
-        $value = ($value === 'true' || $value === '1') ? true : false;
-        $filter = array($name => $value);
+        if ($value === 'true' || $value === '1') {
+            return array($name => true);
+        } elseif ($value === 'false' || $value === '0') {
+            return array($name => false);
+        }
 
-        return $filter;
+        return null;
     }
 
     /**

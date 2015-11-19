@@ -3,7 +3,7 @@
 namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
-use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeInterface;
+use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use Doctrine\MongoDB\Database;
 
 /**

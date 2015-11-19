@@ -21,7 +21,7 @@ trait PaginationTrait
     public function findForPaginate(PaginateFinderConfiguration $configuration)
     {
         $qa = $this->createAggregationQuery();
-        $qa = $this->generateFilterForPaginate($qa,$configuration);
+        $qa = $this->generateFilterForPaginate($qa, $configuration);
 
         return $this->hydrateAggregateQuery($qa);
     }
