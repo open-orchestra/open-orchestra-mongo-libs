@@ -87,6 +87,8 @@ class ReferenceFilterStrategy implements FilterTypeInterface
 
                 if (count($filter) > 0) {
                     return array('$or' => $filter);
+                } else {
+                    return array($property.'.$id' => false);
                 }
             }
         }
