@@ -91,7 +91,6 @@ class ReferenceFilterStrategy implements FilterTypeInterface
             }
         }
 
-
         return null;
     }
 
