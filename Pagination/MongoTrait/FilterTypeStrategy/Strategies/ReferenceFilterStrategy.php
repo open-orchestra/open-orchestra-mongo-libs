@@ -79,15 +79,15 @@ class ReferenceFilterStrategy implements FilterTypeInterface
 
                 $configuration = PaginateFinderConfiguration::generateFromVariable($mapping, array('columns' => array($referenceProperty => $value)));
 
-                $filter = array();
+                $filter = array(
+                    array($property.'.$id' => new \MongoId())
+                );
                 $referenceds = $repository->findForPaginate($configuration);
                 foreach ($referenceds as $referenced) {
                     $filter[] = array($property.'.$id' => new \MongoId($referenced->getId()));
                 }
 
-                if (count($filter) > 0) {
-                    return array('$or' => $filter);
-                }
+                return array('$or' => $filter);
             }
         }
 

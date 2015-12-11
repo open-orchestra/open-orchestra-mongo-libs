@@ -97,15 +97,19 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $columnsTree
-     * @param array  $expectedFilter
+     * @param string   $columnsTree
+     * @param int|null $countOrFilter
      *
      * @dataProvider provideGenerateFilter
      */
-    public function testGenerateFilter($columnsTree, $expectedFilter)
+    public function testGenerateFilter($columnsTree, $countOrFilter = null)
     {
         $filter = $this->strategy->generateFilter($columnsTree, $this->value, $this->documentName);
-        $this->assertEquals($expectedFilter, $filter);
+        if (null === $countOrFilter) {
+            $this->assertNull($filter);
+        } else {
+            $this->assertCount($countOrFilter, $filter['$or']);
+        }
     }
 
     /**
@@ -114,14 +118,9 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     public function provideGenerateFilter()
     {
         return array(
-            array('groups.label', array(
-                '$or' => array(
-                    array('groups.$id' => new \MongoId($this->id0)),
-                    array('groups.$id' => new \MongoId($this->id1)),
-                )
-            )),
-            array('groups', null),
-            array('groups.$id.label', null),
+            array('groups.label', 3),
+            array('groups'),
+            array('groups.$id.label'),
         );
     }
 
