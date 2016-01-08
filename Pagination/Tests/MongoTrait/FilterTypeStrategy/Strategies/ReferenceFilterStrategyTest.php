@@ -11,7 +11,7 @@ use OpenOrchestra\Repository\AbstractAggregateRepository;
 /**
  * Class ReferenceFilterStrategyTest
  */
-class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
+class ReferenceFilterStrategyTest extends AbstractFilterStrategyTest
 {
     /**
      * @var ReferenceFilterStrategy

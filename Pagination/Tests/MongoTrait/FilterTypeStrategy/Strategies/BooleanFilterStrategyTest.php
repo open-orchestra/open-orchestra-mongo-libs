@@ -7,7 +7,7 @@ use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\BooleanFil
 /**
  * Class BooleanFilterStrategyTest
  */
-class BooleanFilterStrategyTest extends \PHPUnit_Framework_TestCase
+class BooleanFilterStrategyTest extends AbstractFilterStrategyTest
 {
     /**
      * @var BooleanFilterStrategy
