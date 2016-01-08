@@ -8,7 +8,7 @@ use MongoDate;
 /**
  * Class DateFilterStrategyTest
  */
-class DateFilterStrategyTest extends \PHPUnit_Framework_TestCase
+class DateTestFilterStrategy extends AbstractTestFilterStrategy
 {
     /**
      * @var DateFilterStrategy
