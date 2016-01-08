@@ -7,7 +7,7 @@ use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\StringFilt
 /**
  * Class StringFilterStrategyTest
  */
-class StringFilterStrategyTest extends AbstractFilterStrategyTest
+class StringTestFilterStrategy extends AbstractTestFilterStrategy
 {
     /**
      * @var StringFilterStrategy

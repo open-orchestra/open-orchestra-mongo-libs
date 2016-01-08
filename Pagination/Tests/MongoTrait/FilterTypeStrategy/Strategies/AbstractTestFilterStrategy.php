@@ -2,10 +2,12 @@
 
 namespace OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies;
 
+use ReflectionObject;
+
 /**
- * Class AbstractFilterStrategyTest
+ * Class AbstractTestFilterStrategy
  */
-class AbstractFilterStrategyTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestFilterStrategy extends \PHPUnit_Framework_TestCase
 {
     /**
      * Clean up

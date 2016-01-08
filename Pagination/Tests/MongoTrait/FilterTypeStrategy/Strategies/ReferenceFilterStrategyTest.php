@@ -11,7 +11,7 @@ use OpenOrchestra\Repository\AbstractAggregateRepository;
 /**
  * Class ReferenceFilterStrategyTest
  */
-class ReferenceFilterStrategyTest extends AbstractFilterStrategyTest
+class ReferenceTestFilterStrategy extends AbstractTestFilterStrategy
 {
     /**
      * @var ReferenceFilterStrategy

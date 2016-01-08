@@ -8,7 +8,7 @@ use MongoDate;
 /**
  * Class DateFilterStrategyTest
  */
-class DateFilterStrategyTest extends AbstractFilterStrategyTest
+class DateTestFilterStrategy extends AbstractTestFilterStrategy
 {
     /**
      * @var DateFilterStrategy
