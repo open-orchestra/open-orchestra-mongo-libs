@@ -50,7 +50,7 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
      * @param array  $condition
      * @param array  $aliases
      *
-     * @return array|string
+     * @return array
      */
 	protected function transformConditionArrayToMongoCondition($field, $regExp, $condition, &$aliases)
 	{
@@ -66,7 +66,7 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
 		}
 
 	    if (count($conditionElements[2]) == 1) {
-	        $result = $conditionElements[2][0];
+	        $result = array($field => array('$eq' => $conditionElements[2][0]));
 	    } else {
     	    $result = array();
     		foreach ($conditionElements[1] as $key => $operator) {
