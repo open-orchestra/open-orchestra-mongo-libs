@@ -16,9 +16,9 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
     /**
      * @param string $condition
      *
-     * @return array|string
+     * @return string
      */
-	public function transformConditionStringToBddCondition($condition, $count = 0, $aliases = array())
+	public function transformConditionStringToBddCondition($field, $condition, $count = 0, $aliases = array())
 	{
 		$result = array();
 		$operator = preg_quote(LuceneSyntaxToBddSyntax::OPERATOR);
@@ -32,14 +32,14 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
 		foreach ($encapsuledElements[0] as $key => $encapsuledElement) {
 			$alias = LuceneSyntaxToBddSyntax::DELIMITER.$count.LuceneSyntaxToBddSyntax::DELIMITER;
 			$condition = preg_replace('/'.preg_quote($encapsuledElement).'/', $alias, $condition, 1);
-			$aliases[$alias] = $this->transformConditionArrayToMongoCondition($explodeCondition, $encapsuledElements[1][$key], $aliases);
+			$aliases[$alias] = $this->transformConditionArrayToMongoCondition($field, $explodeCondition, $encapsuledElements[1][$key], $aliases);
 			$count++;
 		}
 
 		if (count($encapsuledElements[0]) > 0) {
-			$result = $this->transformConditionStringToBddCondition($condition, $count, $aliases);
+			$result = $this->transformConditionStringToBddCondition($field, $condition, $count, $aliases);
 		} else {
-		    $result = $this->transformConditionArrayToMongoCondition($explodeCondition, $condition, $aliases);
+		    $result = json_encode($this->transformConditionArrayToMongoCondition($field, $explodeCondition, $condition, $aliases));
 		}
 
 		return $result;
@@ -52,7 +52,7 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
      *
      * @return array|string
      */
-	protected function transformConditionArrayToMongoCondition($regExp, $condition, &$aliases)
+	protected function transformConditionArrayToMongoCondition($field, $regExp, $condition, &$aliases)
 	{
 
 	    $conditionElements = array();
@@ -71,8 +71,10 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
     	    $result = array();
     		foreach ($conditionElements[1] as $key => $operator) {
     			if ($operator == '-') {
-    				$conditionElements[2][$key] = array('$not' => $conditionElements[2][$key]);
+    				$conditionElements[2][$key] = array($field => array('$ne' => $conditionElements[2][$key]));
     				$conditionElements[1][$key] = '+';
+    			} else {
+    			    $conditionElements[2][$key] = array($field => array('$eq' => $conditionElements[2][$key]));
     			}
     			if ($operator == '') {
     				$conditionElements[1][$key] = ' ';
@@ -102,5 +104,5 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
 }
 
 $luceneSyntaxToBddSyntax = new LuceneSyntaxToBddSyntax();
-print_r($luceneSyntaxToBddSyntax->transformConditionStringToBddCondition('+(cat:X1 cat:X2)+(author:AAA)+(T1 T2-T3)'));
+print_r($luceneSyntaxToBddSyntax->transformConditionStringToBddCondition('keyword', '+(cat:X1 cat:X2)+(author:AAA)+(T1 T2-T3)'));
 ?>
