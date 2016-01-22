@@ -32,7 +32,8 @@
       "OpenOrchestra\\Pagination\\": "Pagination/",
       "OpenOrchestra\\MongoTrait\\": "MongoTrait/",
       "OpenOrchestra\\Repository\\": "Repository/",
-      "OpenOrchestra\\MongoBundle\\": "MongoBundle/"
+      "OpenOrchestra\\MongoBundle\\": "MongoBundle/",
+      "OpenOrchestra\\Transformer\\": "Transformer/"
     }
   }
 }
