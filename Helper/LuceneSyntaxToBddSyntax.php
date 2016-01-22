@@ -9,10 +9,6 @@ use OpenOrchestra\Helper\LuceneSyntaxToBddSyntaxInterface;
  */
 class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
 {
-    CONST OPERATOR = '+- ';
-    CONST RESERVED = '+- )(';
-    CONST DELIMITER = '##';
-
     /**
      * @param string $condition
      *
@@ -21,8 +17,8 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
     public function transformLuceneConditionToBddCondition($field, $condition, $count = 0, $aliases = array())
     {
         $result = array();
-        $operator = preg_quote(LuceneSyntaxToBddSyntax::OPERATOR);
-        $reserved = preg_quote(LuceneSyntaxToBddSyntax::RESERVED);
+        $operator = preg_quote(LuceneSyntaxToBddSyntaxInterface::OPERATOR);
+        $reserved = preg_quote(LuceneSyntaxToBddSyntaxInterface::RESERVED);
         $findEncapsuledCondition = '/\(((['.$operator.']{0,1}[^'.$reserved.']+)+)\)/';
         $explodeCondition = '/(['.$operator.']{0,1})([^'.$reserved.']+)/';
 
@@ -30,7 +26,7 @@ class LuceneSyntaxToBddSyntax implements LuceneSyntaxToBddSyntaxInterface
         preg_match_all($findEncapsuledCondition, $condition, $encapsuledElements);
 
         foreach ($encapsuledElements[0] as $key => $encapsuledElement) {
-            $alias = LuceneSyntaxToBddSyntax::DELIMITER.$count.LuceneSyntaxToBddSyntax::DELIMITER;
+            $alias = LuceneSyntaxToBddSyntaxInterface::DELIMITER.$count.LuceneSyntaxToBddSyntaxInterface::DELIMITER;
             $condition = preg_replace('/'.preg_quote($encapsuledElement).'/', $alias, $condition, 1);
             $aliases[$alias] = $this->transformConditionArrayToMongoCondition($field, $explodeCondition, $encapsuledElements[1][$key], $aliases);
             $count++;
