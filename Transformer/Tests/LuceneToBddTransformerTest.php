@@ -53,7 +53,7 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
     public function testReverseTransformException($value, $field)
     {
         $this->transformer->setField($field);
-        $this->setExpectedException('OpenOrchestra\Backoffice\Exception\MissingFieldTransformerException');
+        $this->setExpectedException('OpenOrchestra\Exception\MissingFieldTransformerException');
         $this->transformer->reverseTransform($value);
     }
 
@@ -101,7 +101,7 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
     public function testTransformException($value, $field)
     {
         $this->transformer->setField($field);
-        $this->setExpectedException('OpenOrchestra\Backoffice\Exception\MissingFieldTransformerException');
+        $this->setExpectedException('OpenOrchestra\Exception\MissingFieldTransformerException');
         $this->transformer->transform($value);
     }
 

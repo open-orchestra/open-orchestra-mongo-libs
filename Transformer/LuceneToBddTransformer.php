@@ -3,7 +3,7 @@
 namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\LuceneToBddTransformerInterface;
-use OpenOrchestra\Backoffice\Exception\MissingFieldTransformerException;
+use OpenOrchestra\Exception\MissingFieldTransformerException;
 
 /**
  * Class LuceneToBddTransformer
