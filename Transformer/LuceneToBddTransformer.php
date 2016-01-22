@@ -3,6 +3,7 @@
 namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\LuceneToBddTransformerInterface;
+use OpenOrchestra\Backoffice\Exception\MissingFieldTransformerException;
 
 /**
  * Class LuceneToBddTransformer
@@ -22,25 +23,37 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
     /**
      * @param string $value
      *
+     * @throws MissingFieldTransformerException
+     *
      * @return array
      */
     public function transform($value)
     {
-        $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
+        if (is_array($value) && is_string($this->field) && array_key_exists($this->field, $value)) {
+            $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
 
-        return $value;
+            return $value;
+        }
+
+        throw new MissingFieldTransformerException();
     }
 
     /**
      * @param array $value
      *
+     * @throws MissingFieldTransformerException
+     *
      * @return array
      */
     public function reverseTransform($value)
     {
-        $value[$this->field] = $this->reverseTransformField($value[$this->field]);
+        if (is_array($value) && is_string($this->field) && array_key_exists($this->field, $value)) {
+            $value[$this->field] = $this->reverseTransformField($value[$this->field]);
 
-        return $value;
+            return $value;
+        }
+
+        throw new MissingFieldTransformerException();
     }
 
     /**
