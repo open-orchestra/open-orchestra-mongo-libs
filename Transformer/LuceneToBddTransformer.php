@@ -48,6 +48,7 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
     public function reverseTransform($value)
     {
         if (is_array($value) && is_string($this->field) && array_key_exists($this->field, $value)) {
+            $value[$this->field] = preg_replace('/ (\+|-)/', '$1', $value[$this->field]);
             $value[$this->field] = $this->reverseTransformField($value[$this->field]);
 
             return $value;
@@ -146,9 +147,8 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
 
         $result = array();
         foreach ($conditionElements[1] as $key => $operator) {
-            $comparison = '$eq';
+            $comparison = ($operator == '-') ? '$ne' : '$eq';
             if ($operator == '-') {
-                $comparison = '$ne';
                 $conditionElements[1][$key] = '+';
             } elseif ($operator == '') {
                 $conditionElements[1][$key] = ' ';
