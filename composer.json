@@ -13,7 +13,6 @@
     "open-orchestra/open-orchestra-libs": "*",
     "doctrine/mongodb": "1.2.1",
     "doctrine/mongodb-odm": "1.0.3",
-    "doctrine/cache": "1.5.*",
     "doctrine/mongodb-odm-bundle" : "3.0.1",
     "solution/mongo-odm-aggregation-bundle": "*",
     "symfony/http-foundation": "*",
