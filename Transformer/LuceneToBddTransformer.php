@@ -3,7 +3,6 @@
 namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\LuceneToBddTransformerInterface;
-use OpenOrchestra\Exception\MissingFieldTransformerException;
 
 /**
  * Class LuceneToBddTransformer
@@ -12,18 +11,16 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
 {
     protected $field = null;
 
-    /**
+    /**"
      * @param string $field
      */
-    public function setField($field)
+    public function __construct($field)
     {
         $this->field = $field;
     }
 
     /**
      * @param string $value
-     *
-     * @throws MissingFieldTransformerException
      *
      * @return array
      */
@@ -34,14 +31,10 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
 
             return $value;
         }
-
-        throw new MissingFieldTransformerException();
     }
 
     /**
      * @param array $value
-     *
-     * @throws MissingFieldTransformerException
      *
      * @return array
      */
@@ -53,8 +46,6 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
 
             return $value;
         }
-
-        throw new MissingFieldTransformerException();
     }
 
     /**

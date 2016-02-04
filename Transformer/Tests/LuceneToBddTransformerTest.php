@@ -16,7 +16,7 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->transformer = new LuceneToBddTransformer();
+        $this->transformer = new LuceneToBddTransformer('keywords');
     }
 
     /**
@@ -27,7 +27,6 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReverseTransform($value, $expected)
     {
-        $this->transformer->setField('keywords');
         $this->assertEquals($expected, $this->transformer->reverseTransform($value));
     }
 
@@ -46,31 +45,6 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed  $value
-     * @param string $field
-     *
-     * @dataProvider provideReverseTransformException
-     */
-    public function testReverseTransformException($value, $field)
-    {
-        $this->transformer->setField($field);
-        $this->setExpectedException('OpenOrchestra\Exception\MissingFieldTransformerException');
-        $this->transformer->reverseTransform($value);
-    }
-
-    /**
-     * @return array
-     */
-    public function provideReverseTransformException()
-    {
-        return array(
-            array(array('keywords' => 'test'), 'keyword'),
-            array('test', 'keyword'),
-            array(null, 'keyword'),
-        );
-    }
-
-    /**
      * @param array $value
      * @param array $expected
      *
@@ -78,7 +52,6 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransform($value, $expected)
     {
-        $this->transformer->setField('keywords');
         $this->assertEquals($expected, $this->transformer->transform($value));
     }
 
@@ -92,29 +65,4 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
             array(array('keywords' => '{"keywords":{"$eq":"test"}}'), array('keywords' => 'test')),
         );
     }
-
-    /**
-     * @param mixed  $value
-     * @param string $field
-     *
-     * @dataProvider provideTransformException
-     */
-    public function testTransformException($value, $field)
-    {
-        $this->transformer->setField($field);
-        $this->setExpectedException('OpenOrchestra\Exception\MissingFieldTransformerException');
-        $this->transformer->transform($value);
-    }
-
-    /**
-     * @return array
-     */
-    public function provideTransformException()
-    {
-        return array(
-            array(array('keywords' => 'test'), 'keyword'),
-            array('test', 'keyword'),
-            array(null, 'keyword'),
-        );
-    }
-    }
+}
