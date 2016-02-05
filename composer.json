@@ -16,6 +16,7 @@
     "doctrine/mongodb-odm-bundle" : "3.0.1",
     "solution/mongo-odm-aggregation-bundle": "*",
     "symfony/http-foundation": "*",
+    "symfony/form" : "*",
     "jms/metadata": "~1.1"
   },
   "require-dev": {
