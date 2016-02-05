@@ -20,15 +20,16 @@ class LuceneToBddTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param string $value
+     * @param array $value
      *
      * @return array
      */
     public function transform($value)
     {
-        if(is_array($value) && array_key_exists($this->field, $value)) {
+        if (is_array($value) && array_key_exists($this->field, $value)) {
             $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
         }
+
         return $value;
     }
 
@@ -39,14 +40,15 @@ class LuceneToBddTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if(is_array($value) && array_key_exists($this->field, $value)) {
+        if (is_array($value) && array_key_exists($this->field, $value)) {
             $value[$this->field] = $this->reverseTransformField(preg_replace('/ *(\+|-|\(|\)) */', '$1', $value[$this->field]));
         }
+
         return $value;
     }
 
     /**
-     * @param string $condition
+     * @param string $conditions
      *
      * @return array|string
      */
@@ -79,8 +81,11 @@ class LuceneToBddTransformer implements DataTransformerInterface
 
     /**
      * @param string $condition
+     * @param int    $count
+     * @param array  $aliases
+     * @param string $delimiter
      *
-     * @return string
+     * @return string|null
      */
     protected function reverseTransformField($condition, $count = 0, $aliases = array(), $delimiter = '##')
     {
@@ -115,12 +120,12 @@ class LuceneToBddTransformer implements DataTransformerInterface
 
     /**
      * @param string $regExp
-     * @param array  $condition
+     * @param string $condition
      * @param array  $aliases
      *
      * @return array
      */
-    protected function transformConditionArrayToMongoCondition($regExp, $condition, &$aliases)
+    protected function transformConditionArrayToMongoCondition($regExp, $condition, array &$aliases)
     {
 
         $conditionElements = array();
