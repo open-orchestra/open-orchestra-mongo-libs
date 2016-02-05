@@ -26,7 +26,10 @@ class LuceneToBddTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        return $this->transformField(json_decode($value, true));
+        if(is_array($value) && array_key_exists($this->field, $value)) {
+            $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
+        }
+        return $value;
     }
 
     /**
@@ -36,7 +39,10 @@ class LuceneToBddTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        return $this->reverseTransformField(preg_replace('/ *(\+|-|\(|\)) */', '$1', $value));
+        if(is_array($value) && array_key_exists($this->field, $value)) {
+            $value[$this->field] = $this->reverseTransformField(preg_replace('/ *(\+|-|\(|\)) */', '$1', $value[$this->field]));
+        }
+        return $value;
     }
 
     /**
