@@ -36,11 +36,11 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
     public function provideReverseTransformValue()
     {
         return array(
-            array('+(cat:X1 cat:X2) +(author:AAA) +(T1 T2 -T3)', '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}'),
-            array('+(cat:X1 cat:X2)+(author:AAA)+(T1 T2-T3)', '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}'),
-            array('(+(cat:X1 cat:X2)+author:AAA+(+(T1 T2)-T3))', '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}'),
-            array('test', '{"keywords":{"$eq":"test"}}'),
-            array('(test(', '{"keywords":{"$eq":"test"}}'),
+            array(array('keywords' => '+(cat:X1 cat:X2) +(author:AAA) +(T1 T2 -T3)'), array('keywords' => '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}')),
+            array(array('keywords' => '+(cat:X1 cat:X2)+(author:AAA)+(T1 T2-T3)'), array('keywords' => '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}')),
+            array(array('keywords' => '(+(cat:X1 cat:X2)+author:AAA+(+(T1 T2)-T3))'), array('keywords' => '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}')),
+            array(array('keywords' => 'test'), array('keywords' => '{"keywords":{"$eq":"test"}}')),
+            array(array('keywords' => '(test('), array('keywords' => '{"keywords":{"$eq":"test"}}')),
         );
     }
 
@@ -61,8 +61,8 @@ class LuceneToBddTransformerTest extends \PHPUnit_Framework_TestCase
     public function provideTransformValue()
     {
         return array(
-            array('{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}', '(+(cat:X1 cat:X2)+author:AAA+(+(T1 T2)-T3))'),
-            array('{"keywords":{"$eq":"test"}}', 'test'),
+            array(array('keywords' => '{"$and":[{"$or":[{"keywords":{"$eq":"cat:X1"}},{"keywords":{"$eq":"cat:X2"}}]},{"keywords":{"$eq":"author:AAA"}},{"$and":[{"$or":[{"keywords":{"$eq":"T1"}},{"keywords":{"$eq":"T2"}}]},{"keywords":{"$ne":"T3"}}]}]}'), array('keywords' => '(+(cat:X1 cat:X2)+author:AAA+(+(T1 T2)-T3))')),
+            array(array('keywords' => '{"keywords":{"$eq":"test"}}'), array('keywords' => 'test')),
         );
     }
 }
