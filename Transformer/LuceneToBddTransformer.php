@@ -2,12 +2,12 @@
 
 namespace OpenOrchestra\Transformer;
 
-use OpenOrchestra\Transformer\LuceneToBddTransformerInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 
 /**
  * Class LuceneToBddTransformer
  */
-class LuceneToBddTransformer implements LuceneToBddTransformerInterface
+class LuceneToBddTransformer implements DataTransformerInterface
 {
     protected $field = null;
 
@@ -26,11 +26,7 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
      */
     public function transform($value)
     {
-        if (is_array($value) && is_string($this->field) && array_key_exists($this->field, $value)) {
-            $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
-
-            return $value;
-        }
+        return $this->transformField(json_decode($value, true));
     }
 
     /**
@@ -40,12 +36,7 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (is_array($value) && is_string($this->field) && array_key_exists($this->field, $value)) {
-            $value[$this->field] = preg_replace('/ (\+|-)/', '$1', $value[$this->field]);
-            $value[$this->field] = $this->reverseTransformField($value[$this->field]);
-
-            return $value;
-        }
+        return $this->reverseTransformField(preg_replace('/ *(\+|-|\(|\)) */', '$1', $value));
     }
 
     /**
@@ -53,7 +44,7 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
      *
      * @return array|string
      */
-    public function transformField($conditions)
+    protected function transformField($conditions)
     {
         if (!is_null($conditions)) {
             foreach($conditions as $key => $condition) {
@@ -85,7 +76,7 @@ class LuceneToBddTransformer implements LuceneToBddTransformerInterface
      *
      * @return string
      */
-    public function reverseTransformField($condition, $count = 0, $aliases = array(), $delimiter = '##')
+    protected function reverseTransformField($condition, $count = 0, $aliases = array(), $delimiter = '##')
     {
         if (!is_null($condition)) {
             $result = array();
