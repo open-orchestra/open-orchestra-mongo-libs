@@ -1,2 +1,2 @@
 parameters:
-    open_orchestra.transformer.lucene_to_bdd.class: OpenOrchestra\Transformer\LuceneToBddTransformer
+    open_orchestra.transformer.sql_to_bdd.class: OpenOrchestra\Transformer\SqlToBddTransformer
