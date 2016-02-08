@@ -97,14 +97,14 @@ class SqlToBddTransformer implements DataTransformerInterface
             foreach ($encapsuledElements[0] as $key => $encapsuledElement) {
                 $alias = $delimiter.$count.$delimiter;
                 $condition = preg_replace('/'.preg_quote($encapsuledElement).'/', $alias, $condition, 1);
-                $aliases[$alias] = $this->transformConditionArrayToMongoCondition($encapsuledElements[1][$key], $aliases);
+                $aliases[$alias] = $this->transformConditionToMongoCondition($encapsuledElements[1][$key], $aliases);
                 $count++;
             }
 
             if (count($encapsuledElements[0]) > 0) {
                 $result = $this->reverseTransformField($condition, $count, $aliases, $delimiter);
             } else {
-                $result = json_encode($this->transformConditionArrayToMongoCondition($condition, $aliases));
+                $result = json_encode($this->transformConditionToMongoCondition($condition, $aliases));
             }
         } else {
             $result = null;
@@ -119,7 +119,7 @@ class SqlToBddTransformer implements DataTransformerInterface
      *
      * @return array
      */
-    protected function transformConditionArrayToMongoCondition($condition, array &$aliases)
+    protected function transformConditionToMongoCondition($condition, array &$aliases)
     {
         $operator = '$or';
         $conditionElements = explode(' OR ', $condition);
