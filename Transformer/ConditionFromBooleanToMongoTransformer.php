@@ -3,11 +3,12 @@
 namespace OpenOrchestra\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
+use OpenOrchestra\Exceptions\MalFormedConditionException;
 
 /**
- * Class SqlToBddTransformer
+ * Class ConditionFromBooleanToMongoTransformer
  */
-class SqlToBddTransformer implements DataTransformerInterface
+class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
 {
     protected $field = null;
 
@@ -66,10 +67,10 @@ class SqlToBddTransformer implements DataTransformerInterface
                     $conditions = 'NOT '.$conditions[$key];
                     break;
                 } elseif ($key === '$and') {
-                    $conditions = '('.implode(' AND ', $conditions[$key]).')';
+                    $conditions = '( '.implode(' AND ', $conditions[$key]).' )';
                     break;
                 } elseif ($key === '$or') {
-                    $conditions = '('.implode(' OR ', $conditions[$key]).')';
+                    $conditions = '( '.implode(' OR ', $conditions[$key]).' )';
                     break;
                 }
             }
@@ -90,17 +91,15 @@ class SqlToBddTransformer implements DataTransformerInterface
     {
         if (!is_null($condition)) {
             $result = array();
-            $reserved = preg_quote(')(');
-            $findEncapsuledCondition = '/\(([^'.$reserved.']+)\)/';
+            $getBalancedBracketsRegExp = '/\( ([^\(\)]*) \)/';
             $encapsuledElements = array();
-            preg_match_all($findEncapsuledCondition, $condition, $encapsuledElements);
+            preg_match_all($getBalancedBracketsRegExp, $condition, $encapsuledElements);
             foreach ($encapsuledElements[0] as $key => $encapsuledElement) {
                 $alias = $delimiter.$count.$delimiter;
                 $condition = preg_replace('/'.preg_quote($encapsuledElement).'/', $alias, $condition, 1);
                 $aliases[$alias] = $this->transformConditionToMongoCondition($encapsuledElements[1][$key], $aliases);
                 $count++;
             }
-
             if (count($encapsuledElements[0]) > 0) {
                 $result = $this->reverseTransformField($condition, $count, $aliases, $delimiter);
             } else {
@@ -118,32 +117,42 @@ class SqlToBddTransformer implements DataTransformerInterface
      * @param array  $aliases
      *
      * @return array
+     *
+     * @throws MalFormedConditionException
      */
     protected function transformConditionToMongoCondition($condition, array &$aliases)
     {
-        $operator = '$or';
-        $conditionElements = explode(' OR ', $condition);
+        $isAndBooleanRegExp = '/^((NOT (?=.)){0,1}[^ \(\)]+( AND (?=.)){0,1})+$/';
+        $isOrBooleanRegExp = '/^((NOT (?=.)){0,1}[^ \(\)]+( OR (?=.)){0,1})+$/';
+        $getAndSubBooleanRegExp = '/(NOT (?=.)){0,1}([^ \(\)]+)( AND (?=.)){0,1}/';
+        $getOrSubBooleanRegExp = '/(NOT (?=.)){0,1}([^ \(\)]+)( OR (?=.)){0,1}/';
+        $subElements = array();
 
-        if (count($conditionElements) == 1) {
-            $operator = '$and';
-            $conditionElements = explode(' AND ', $condition);
+        if (preg_match($isAndBooleanRegExp, $condition)) {
+            preg_match_all($getAndSubBooleanRegExp, $condition, $subElements);
+        } elseif  (preg_match($isOrBooleanRegExp, $condition)) {
+            preg_match_all($getOrSubBooleanRegExp, $condition, $subElements);
+        }
+        if (count($subElements) > 0) {
+            $operator = ($subElements[3][0] == ' OR ') ? '$or' : '$and';
+            $result = array();
+            foreach($subElements[2] as $key => $subElement) {
+                if (array_key_exists($subElement, $aliases)) {
+                    if ($subElements[1][$key] != '') {
+                        array_push($result, array('$not' => $aliases[$subElement]));
+                    } else {
+                        array_push($result, $aliases[$subElement]);
+                    }
+                    unset($aliases[$subElement]);
+                } else {
+                    $comparison = ($subElements[1][$key] == '') ? '$eq' : '$ne';
+                    array_push($result, array($this->field => array($comparison => $subElement)));
+                }
+            }
+
+            return (array($operator => $result));
         }
 
-        foreach ($conditionElements as $key => $element) {
-            $comparison = '$eq';
-            if(strpos($element, 'NOT ') !== false) {
-                $comparison = '$ne';
-                $conditionElements[$key] = substr($element, 4);
-            }
-            if (array_key_exists($element, $aliases)) {
-                $conditionElements[$key] = $aliases[$element];
-                unset($aliases[$element]);
-            }
-            if (!is_array($conditionElements[$key])) {
-                $conditionElements[$key] = array($this->field => array($comparison => $conditionElements[$key]));
-            }
-        }
-
-        return array($operator => $conditionElements);
+        throw new MalFormedConditionException();
     }
 }
