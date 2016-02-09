@@ -34,7 +34,7 @@
       "OpenOrchestra\\MongoTrait\\": "MongoTrait/",
       "OpenOrchestra\\Repository\\": "Repository/",
       "OpenOrchestra\\MongoBundle\\": "MongoBundle/",
-      "OpenOrchestra\\Transformer\\": "Transformer/"
+      "OpenOrchestra\\Transformer\\": "Transformer/",
       "OpenOrchestra\\Exceptions\\": "Exceptions/"
     }
   }
