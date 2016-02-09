@@ -1,2 +1,2 @@
 parameters:
-    open_orchestra.transformer.sql_to_bdd.class: OpenOrchestra\Transformer\SqlToBddTransformer
+    open_orchestra.transformer.boolean_to_bdd.class: OpenOrchestra\Transformer\ConditionFromBooleanToMongoTransformer
