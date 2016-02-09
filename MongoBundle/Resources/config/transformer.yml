@@ -1,0 +1,2 @@
+parameters:
+    open_orchestra.transformer.boolean_to_bdd.class: OpenOrchestra\Transformer\ConditionFromBooleanToMongoTransformer
