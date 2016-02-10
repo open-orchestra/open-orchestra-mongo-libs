@@ -27,11 +27,8 @@ class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        if (is_array($value) && array_key_exists($this->field, $value)) {
-            $value[$this->field] = $this->transformField(json_decode($value[$this->field], true));
-        }
-
-        return $value;
+        var_dump('transform', $this->transformField(json_decode($value, true)));
+        return $this->transformField(json_decode($value, true));
     }
 
     /**
@@ -41,11 +38,8 @@ class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (is_array($value) && array_key_exists($this->field, $value)) {
-            $value[$this->field] = $this->reverseTransformField($value[$this->field]);
-        }
-
-        return $value;
+        var_dump('reverseTransform', $this->reverseTransformField($value));
+        return $this->reverseTransformField($value);
     }
 
     /**
