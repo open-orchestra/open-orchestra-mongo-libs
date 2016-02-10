@@ -27,7 +27,6 @@ class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        var_dump('transform', $this->transformField(json_decode($value, true)));
         return $this->transformField(json_decode($value, true));
     }
 
@@ -38,7 +37,6 @@ class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        var_dump('reverseTransform', $this->reverseTransformField($value));
         return $this->reverseTransformField($value);
     }
 
