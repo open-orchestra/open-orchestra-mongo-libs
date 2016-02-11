@@ -2,28 +2,18 @@
 
 namespace OpenOrchestra\Transformer;
 
-use Symfony\Component\Form\DataTransformerInterface;
+use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformer;
 use OpenOrchestra\Exceptions\MalFormedConditionException;
 
 /**
  * Class ConditionFromBooleanToMongoTransformer
  */
-class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
+class ConditionFromBooleanToMongoTransformer extends ConditionFromBooleanToBddTransformer
 {
-    protected $field = null;
-
-    /**"
-     * @param string $field
-     */
-    public function __construct($field)
-    {
-        $this->field = $field;
-    }
-
     /**
-     * @param array $value
+     * @param string $value
      *
-     * @return array
+     * @return string
      */
     public function transform($value)
     {
@@ -31,9 +21,9 @@ class ConditionFromBooleanToMongoTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param array $value
+     * @param string $value
      *
-     * @return array
+     * @return string
      */
     public function reverseTransform($value)
     {
