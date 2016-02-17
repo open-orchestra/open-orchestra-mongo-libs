@@ -10,13 +10,13 @@ use OpenOrchestra\Exceptions\MalFormedConditionException;
  */
 class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBddTransformerInterface
 {
-
     protected $field = '';
 
     /**
      * @param string $field
      */
-    public function setField($field) {
+    public function setField($field)
+    {
         $this->field = $field;
     }
 
