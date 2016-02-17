@@ -16,7 +16,8 @@ class ConditionFromBooleanToMongoTransformerTest extends \PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $this->transformer = new ConditionFromBooleanToMongoTransformer('keywords');
+        $this->transformer = new ConditionFromBooleanToMongoTransformer();
+        $this->transformer->setField('keywords');
     }
 
     /**
