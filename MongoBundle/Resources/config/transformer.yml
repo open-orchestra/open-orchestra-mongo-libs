@@ -3,5 +3,3 @@ parameters:
 services:
     open_orchestra.transformer.boolean_to_bdd:
         class: %open_orchestra.transformer.boolean_to_bdd.class%
-        arguments:
-            - ''

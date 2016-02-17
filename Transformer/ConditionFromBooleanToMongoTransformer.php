@@ -2,14 +2,24 @@
 
 namespace OpenOrchestra\Transformer;
 
-use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformer;
+use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformerInterface;
 use OpenOrchestra\Exceptions\MalFormedConditionException;
 
 /**
  * Class ConditionFromBooleanToMongoTransformer
  */
-class ConditionFromBooleanToMongoTransformer extends ConditionFromBooleanToBddTransformer
+class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBddTransformerInterface
 {
+
+    protected $field = '';
+
+    /**
+     * @param string $field
+     */
+    public function setField($field) {
+        $this->field = $field;
+    }
+
     /**
      * @param string $value
      *
