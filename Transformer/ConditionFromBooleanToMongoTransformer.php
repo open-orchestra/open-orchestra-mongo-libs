@@ -3,7 +3,7 @@
 namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformerInterface;
-use OpenOrchestra\Exceptions\MalFormedConditionException;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * Class ConditionFromBooleanToMongoTransformer
@@ -110,7 +110,7 @@ class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBd
      *
      * @return array
      *
-     * @throws MalFormedConditionException
+     * @throws TransformationFailedException
      */
     protected function transformConditionToMongoCondition($condition, array &$aliases)
     {
@@ -145,6 +145,6 @@ class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBd
             return (array($operator => $result));
         }
 
-        throw new MalFormedConditionException();
+        throw new TransformationFailedException();
     }
 }

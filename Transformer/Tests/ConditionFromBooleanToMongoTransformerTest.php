@@ -51,7 +51,7 @@ class ConditionFromBooleanToMongoTransformerTest extends \PHPUnit_Framework_Test
      */
     public function testExceptionReverseTransform($value)
     {
-        $this->setExpectedException('OpenOrchestra\Exceptions\MalFormedConditionException');
+        $this->setExpectedException('Symfony\Component\Form\Exception\TransformationFailedException');
         $this->transformer->reverseTransform($value);
     }
 
