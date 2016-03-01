@@ -171,7 +171,7 @@ trait FilterTrait
      */
     protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true)
     {
-        if (null !== $order) {
+        if (null !== $order && !empty($order)) {
             $columnsName = $order['name'];
             if (isset($descriptionEntity[$columnsName])){
                 $key = $descriptionEntity[$columnsName]['field'];
