@@ -10,7 +10,7 @@
   ],
   "require": {
     "open-orchestra/open-orchestra-libs": "1.1.*@dev",
-    "doctrine/mongodb-odm-bundle" : "3.0.1",
+    "doctrine/mongodb-odm-bundle": "~3.1.0",
     "solution/mongo-odm-aggregation-bundle": "dev-master",
     "solution/pipeline-builder": "dev-master",
     "symfony/http-foundation": "*",
@@ -19,7 +19,7 @@
   "require-dev": {
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
-    "phpunit/phpunit" : "4.7.2",
+    "phpunit/phpunit": "4.7.2",
     "phake/phake": "2.1.0"
   },
   "extra": {
