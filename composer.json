@@ -8,11 +8,11 @@
       "homepage": "https://github.com/open-orchestra/open-orchestra-libs/graphs/contributors"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
-    "open-orchestra/open-orchestra-libs": "*",
+    "open-orchestra/open-orchestra-libs": "1.1.*@dev",
     "doctrine/mongodb-odm-bundle" : "3.0.1",
-    "solution/mongo-odm-aggregation-bundle": "*",
+    "solution/mongo-odm-aggregation-bundle": "dev-master",
+    "solution/pipeline-builder": "dev-master",
     "symfony/http-foundation": "*",
     "jms/metadata": "~1.1"
   },
@@ -21,6 +21,11 @@
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
     "phake/phake": "2.1.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.1.x-dev"
+    }
   },
   "config" : {
     "bin-dir" : "bin"
