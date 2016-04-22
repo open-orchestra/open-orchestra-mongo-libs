@@ -11,8 +11,8 @@
   "require": {
     "open-orchestra/open-orchestra-libs": "1.1.*@dev",
     "doctrine/mongodb-odm-bundle": "~3.1.0",
-    "solution/mongo-odm-aggregation-bundle": "~0.1",
-    "solution/pipeline-builder": "~0.1",
+    "solution/mongo-odm-aggregation-bundle": "0.1",
+    "solution/pipeline-builder": "0.1",
     "symfony/http-foundation": "*",
     "jms/metadata": "~1.1"
   },
