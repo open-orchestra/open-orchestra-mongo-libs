@@ -8,27 +8,32 @@
       "homepage": "https://github.com/open-orchestra/open-orchestra-libs/graphs/contributors"
     }
   ],
+
   "require": {
-    "open-orchestra/open-orchestra-libs": "1.2.*@dev",
     "doctrine/mongodb-odm-bundle": "~3.1.0",
+    "jms/metadata": "~1.5.1",
     "solution/mongo-odm-aggregation-bundle": "~0.1.1",
-    "symfony/http-foundation": "*",
-    "jms/metadata": "~1.1"
+    "symfony/http-foundation": "~2.8.6",
+    "open-orchestra/open-orchestra-libs": "1.2.*@dev"
   },
+
   "require-dev": {
-    "psr/log": "1.0.0",
-    "codeclimate/php-test-reporter": "dev-master",
-    "phpunit/phpunit": "4.7.2",
-    "phake/phake": "2.1.0"
+    "phake/phake": "~2.1.0",
+    "phpunit/phpunit": "~4.8.0",
+
+    "codeclimate/php-test-reporter": "~0.3.2"
   },
+
   "extra": {
     "branch-alias": {
       "dev-master": "1.2.x-dev"
     }
   },
-  "config" : {
-    "bin-dir" : "bin"
+
+  "config": {
+    "bin-dir": "bin"
   },
+
   "autoload": {
     "psr-4": {
       "OpenOrchestra\\Pagination\\": "Pagination/",
