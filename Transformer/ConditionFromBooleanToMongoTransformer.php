@@ -4,6 +4,7 @@ namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+@trigger_error('The '.__NAMESPACE__.'\ConditionFromBooleanToMongoTransformer class is deprecated since version 1.2.0 and will be removed in 1.2.1', E_USER_DEPRECATED);
 
 /**
  * Class ConditionFromBooleanToMongoTransformer
@@ -37,6 +38,7 @@ class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBd
      */
     public function reverseTransform($value)
     {
+        $value = "( NOT ( cat:X1 OR cat:X2 ) AND author:AAA ) OR ( T1 OR T2 OR NOT T3 )";
         return $this->reverseTransformField($value);
     }
 
@@ -114,19 +116,11 @@ class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBd
      */
     protected function transformConditionToMongoCondition($condition, array &$aliases)
     {
-        $isAndBooleanRegExp = '/^((NOT (?=.)){0,1}[^ \(\)]+( AND (?=.)){0,1})+$/';
-        $isOrBooleanRegExp = '/^((NOT (?=.)){0,1}[^ \(\)]+( OR (?=.)){0,1})+$/';
-        $getAndSubBooleanRegExp = '/(NOT (?=.)){0,1}([^ \(\)]+)( AND (?=.)){0,1}/';
-        $getOrSubBooleanRegExp = '/(NOT (?=.)){0,1}([^ \(\)]+)( OR (?=.)){0,1}/';
+        $getSubBooleanRegExp = '/(NOT (?=.)){0,1}([^ \(\)]+)( (AND|OR) (?=.)){0,1}/';
         $subElements = array();
 
-        if (preg_match($isAndBooleanRegExp, $condition)) {
-            preg_match_all($getAndSubBooleanRegExp, $condition, $subElements);
-        } elseif  (preg_match($isOrBooleanRegExp, $condition)) {
-            preg_match_all($getOrSubBooleanRegExp, $condition, $subElements);
-        }
-        if (count($subElements) > 0) {
-            $operator = ($subElements[3][0] == ' OR ') ? '$or' : '$and';
+        if (preg_match_all($getSubBooleanRegExp, $condition, $subElements) !== false) {
+            $operator = ($subElements[4][0] == 'OR') ? '$or' : '$and';
             $result = array();
             foreach($subElements[2] as $key => $subElement) {
                 if (array_key_exists($subElement, $aliases)) {
