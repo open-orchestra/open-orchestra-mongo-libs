@@ -4,10 +4,12 @@ namespace OpenOrchestra\Transformer;
 
 use OpenOrchestra\Transformer\ConditionFromBooleanToBddTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-@trigger_error('The '.__NAMESPACE__.'\ConditionFromBooleanToMongoTransformer class is deprecated since version 1.2.0 and will be removed in 1.2.1', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\ConditionFromBooleanToMongoTransformer class is deprecated since version 1.2.0 and will be removed in 1.3.0', E_USER_DEPRECATED);
 
 /**
  * Class ConditionFromBooleanToMongoTransformer
+ *
+ * @deprecated will be removed in 1.3.0
  */
 class ConditionFromBooleanToMongoTransformer implements ConditionFromBooleanToBddTransformerInterface
 {
