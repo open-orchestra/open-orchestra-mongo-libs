@@ -2,15 +2,19 @@
 
 namespace OpenOrchestra\MongoTrait;
 
+use Doctrine\Common\Collections\Collection;
+use OpenOrchestra\ModelInterface\Model\TranslatedValueInterface;
+
 /**
  * Trait Metaable
  */
 trait Metaable
 {
     /**
-     * @var string $metaKeywords
+     * @var Collection $metaKeywords
      *
-     * @ODM\Field(type="string")
+     * @ODM\EmbedMany(targetDocument="OpenOrchestra\ModelInterface\Model\TranslatedValueInterface", strategy="set")
+     * @ORCHESTRA\Search(key="metaKeyword", type="translatedValue")
      */
     protected $metaKeywords;
 
@@ -19,7 +23,14 @@ trait Metaable
      *
      * @ODM\Field(type="string")
      */
-    protected $metaDescription;
+
+    /**
+     * @var Collection $metaDescriptions
+     *
+     * @ODM\EmbedMany(targetDocument="OpenOrchestra\ModelInterface\Model\TranslatedValueInterface", strategy="set")
+     * @ORCHESTRA\Search(key="metaDescription", type="translatedValue")
+     */
+    protected $metaDescriptions;
 
     /**
      * @var boolean metaIndex
@@ -36,15 +47,47 @@ trait Metaable
     protected $metaFollow = false;
 
     /**
-     * @param string $metaKeywords
+     * @param Collection $metaKeywords
      */
-    public function setMetaKeywords($metaKeywords)
-    {
+    public function setMetaKeywords(Collection $metaKeywords) {
         $this->metaKeywords = $metaKeywords;
     }
 
     /**
+     * @param Collection $metaDescription
+     */
+    public function setMetaDescriptions(Collection $metaDescription) {
+        $this->metaDescriptions = $metaDescription;
+    }
+
+    /**
+     * @param TranslatedValueInterface $metaKeyword
+     */
+    public function addMetaKeyword(TranslatedValueInterface $metaKeyword)
+    {
+        $this->metaKeywords->set($metaKeyword->getLanguage(), $metaKeyword);
+    }
+
+    /**
+     * @param TranslatedValueInterface $metaKeyword
+     */
+    public function removeMetaKeyword(TranslatedValueInterface $metaKeyword)
+    {
+        $this->metaKeywords->remove($metaKeyword->getLanguage());
+    }
+
+    /**
+     * @param string $language
+     *
      * @return string
+     */
+    public function getMetaKeyword($language = 'en')
+    {
+        return $this->metaKeywords->get($language)->getValue();
+    }
+
+    /**
+     * @return Collection
      */
     public function getMetaKeywords()
     {
@@ -52,19 +95,37 @@ trait Metaable
     }
 
     /**
-     * @param string $metaDescription
+     * @param TranslatedValueInterface $metaKeyword
      */
-    public function setMetaDescription($metaDescription)
+    public function addMetaDescription(TranslatedValueInterface $metaDescription)
     {
-        $this->metaDescription = $metaDescription;
+        $this->metaDescriptions->set($metaDescription->getLanguage(), $metaDescription);
     }
 
     /**
+     * @param TranslatedValueInterface $metaDescription
+     */
+    public function removeMetaDescription(TranslatedValueInterface $metaDescription)
+    {
+        $this->metaDescriptions->remove($metaDescription->getLanguage());
+    }
+
+    /**
+     * @param string $language
+     *
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription($language = 'en')
     {
-        return $this->metaDescription;
+        return $this->metaDescriptions->get($language)->getValue();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMetaDescriptions()
+    {
+        return $this->metaDescriptions;
     }
 
     /**
@@ -97,5 +158,16 @@ trait Metaable
     public function getMetaFollow()
     {
         return $this->metaFollow;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslatedProperties()
+    {
+        return array(
+            'getMetaKeywords',
+            'getMetaDescriptions'
+        );
     }
 }
