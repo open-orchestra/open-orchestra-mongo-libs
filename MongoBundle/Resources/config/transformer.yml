@@ -3,3 +3,4 @@ parameters:
 services:
     open_orchestra.transformer.boolean_to_bdd:
         class: %open_orchestra.transformer.boolean_to_bdd.class%
+        deprecated: 'The "%service_id%" service is deprecated. Use " open_orchestra_model.transformer.boolean_to_bdd" instead'
