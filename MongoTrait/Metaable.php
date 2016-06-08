@@ -19,12 +19,6 @@ trait Metaable
     protected $metaKeywords;
 
     /**
-     * @var string $metaDescription
-     *
-     * @ODM\Field(type="string")
-     */
-
-    /**
      * @var Collection $metaDescriptions
      *
      * @ODM\EmbedMany(targetDocument="OpenOrchestra\ModelInterface\Model\TranslatedValueInterface", strategy="set")
