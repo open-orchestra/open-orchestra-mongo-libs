@@ -8,20 +8,6 @@ namespace OpenOrchestra\MongoTrait;
 trait Metaable
 {
     /**
-     * @var string $metaKeywords
-     *
-     * @ODM\Field(type="string")
-     */
-    protected $metaKeywords;
-
-    /**
-     * @var string $metaDescription
-     *
-     * @ODM\Field(type="string")
-     */
-    protected $metaDescription;
-
-    /**
      * @var boolean metaIndex
      *
      * @ODM\Field(type="boolean")
@@ -34,38 +20,6 @@ trait Metaable
      * @ODM\Field(type="boolean")
      */
     protected $metaFollow = false;
-
-    /**
-     * @param string $metaKeywords
-     */
-    public function setMetaKeywords($metaKeywords)
-    {
-        $this->metaKeywords = $metaKeywords;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
-    {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * @param string $metaDescription
-     */
-    public function setMetaDescription($metaDescription)
-    {
-        $this->metaDescription = $metaDescription;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
 
     /**
      * @param boolean $metaIndex
