@@ -10,6 +10,7 @@
   ],
 
   "require": {
+    "php": "~5.6.0",
     "doctrine/mongodb-odm-bundle": "~3.1.0",
     "jms/metadata": "~1.5.1",
     "solution/mongo-odm-aggregation-bundle": "~0.1.1",
