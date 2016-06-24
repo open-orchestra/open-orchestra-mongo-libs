@@ -15,19 +15,13 @@
     "jms/metadata": "~1.5.1",
     "solution/mongo-odm-aggregation-bundle": "~0.1.1",
     "symfony/http-foundation": "~2.8.6",
-    "open-orchestra/open-orchestra-libs": "1.2.*@dev"
+    "open-orchestra/open-orchestra-libs": "self.version"
   },
 
   "require-dev": {
     "codeclimate/php-test-reporter": "~0.3.2",
     "phake/phake": "~2.1.0",
     "phpunit/phpunit": "~4.8.0"
-  },
-
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.2.x-dev"
-    }
   },
 
   "config": {
