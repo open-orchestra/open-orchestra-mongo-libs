@@ -9,43 +9,43 @@ parameters:
 
 services:
     open_orchestra_pagination.filter_type.manager:
-        class: %open_orchestra_pagination.filter_type.manager.class%
+        class: '%open_orchestra_pagination.filter_type.manager.class%'
 
     open_orchestra_pagination.filter_type.string_filter:
-        class: %open_orchestra_pagination.filter_type.string_filter.class%
+        class: '%open_orchestra_pagination.filter_type.string_filter.class%'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
     open_orchestra_pagination.filter_type.integer_filter:
-        class: %open_orchestra_pagination.filter_type.integer_filter.class%
+        class: '%open_orchestra_pagination.filter_type.integer_filter.class%'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
     open_orchestra_pagination.filter_type.boolean_filter:
-        class: %open_orchestra_pagination.filter_type.boolean_filter.class%
+        class: '%open_orchestra_pagination.filter_type.boolean_filter.class%'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
     open_orchestra_pagination.filter_type.translated_filter:
-        class: %open_orchestra_pagination.filter_type.translated_filter.class%
+        class: '%open_orchestra_pagination.filter_type.translated_filter.class%'
         arguments:
-            - @doctrine.odm.mongodb.document_manager
+            - '@doctrine.odm.mongodb.document_manager'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
     open_orchestra_pagination.filter_type.reference_filter:
-        class: %open_orchestra_pagination.filter_type.reference_filter.class%
+        class: '%open_orchestra_pagination.filter_type.reference_filter.class%'
         arguments:
-            - @doctrine.odm.mongodb.document_manager
-            - @open_orchestra.annotation_search_reader
-            - @doctrine_mongodb.odm.default_aggregation_query
-            - @open_orchestra_pagination.filter_type.manager
+            - '@doctrine.odm.mongodb.document_manager'
+            - '@open_orchestra.annotation_search_reader'
+            - '@doctrine_mongodb.odm.default_aggregation_query'
+            - '@open_orchestra_pagination.filter_type.manager'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
 
     open_orchestra_pagination.filter_type.date_filter:
-        class: %open_orchestra_pagination.filter_type.date_filter.class%
+        class: '%open_orchestra_pagination.filter_type.date_filter.class%'
         arguments:
-            - @doctrine.odm.mongodb.document_manager
+            - '@doctrine.odm.mongodb.document_manager'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
