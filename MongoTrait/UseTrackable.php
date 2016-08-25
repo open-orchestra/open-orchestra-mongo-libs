@@ -53,6 +53,46 @@ trait UseTrackable
     }
 
     /**
+     * @param string $contentTypeId
+     */
+    public function addUseInContentType($contentTypeId)
+    {
+        if (is_string($contentTypeId)) {
+            $this->useReferences[self::KEY_CONTENT_TYPE][$contentTypeId] = $contentTypeId;
+        }
+    }
+
+    /**
+     * @param string $contentTypeId
+     */
+    public function removeUseInContentType($contentTypeId)
+    {
+        if (is_string($contentTypeId)) {
+            unset($this->useReferences[self::KEY_CONTENT_TYPE][$contentTypeId]);
+        }
+    }
+
+    /**
+     * @param string $mediaId
+     */
+    public function addUseInMedia($mediaId)
+    {
+        if (is_string($mediaId)) {
+            $this->useReferences[self::KEY_MEDIA][$mediaId] = $mediaId;
+        }
+    }
+
+    /**
+     * @param string $mediaId
+     */
+    public function removeUseInMedia($mediaId)
+    {
+        if (is_string($mediaId)) {
+            unset($this->useReferences[self::KEY_MEDIA][$mediaId]);
+        }
+    }
+
+    /**
      * @return array
      */
     public function getUseReferences()
