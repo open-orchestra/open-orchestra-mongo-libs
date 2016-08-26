@@ -41,4 +41,20 @@ trait UseTrackable
     {
         return $this->useReferences;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isUsed()
+    {
+        $countReferences = 0;
+
+        foreach ($this->useReferences as $referencesByType) {
+            if (is_array($referencesByType)) {
+                $countReferences += count($referencesByType);
+            }
+        }
+
+        return 0 < $countReferences;
+    }
 }
