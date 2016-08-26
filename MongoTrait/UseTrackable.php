@@ -13,82 +13,24 @@ trait UseTrackable
     protected $useReferences = array();
 
     /**
-     * @param string $nodeId
+     * @param string $entityId
+     * @param string $entityType
      */
-    public function addUseInNode($nodeId)
+    public function addUseInEntity($entityId, $entityType)
     {
-        if (is_string($nodeId)) {
-            $this->useReferences[self::KEY_NODE][$nodeId] = $nodeId;
+        if (is_string($entityId) && is_string($entityType)) {
+            $this->useReferences[$entityType][$entityId] = $entityId;
         }
     }
 
     /**
-     * @param string $nodeId
+     * @param string $entityId
+     * @param string $entityType
      */
-    public function removeUseInNode($nodeId)
+    public function removeUseInEntity($entityId, $entityType)
     {
-        if (is_string($nodeId)) {
-            unset($this->useReferences[self::KEY_NODE][$nodeId]);
-        }
-    }
-
-    /**
-     * @param string $contentId
-     */
-    public function addUseInContent($contentId)
-    {
-        if (is_string($contentId)) {
-            $this->useReferences[self::KEY_CONTENT][$contentId] = $contentId;
-        }
-    }
-
-    /**
-     * @param string $contentId
-     */
-    public function removeUseInContent($contentId)
-    {
-        if (is_string($contentId)) {
-            unset($this->useReferences[self::KEY_CONTENT][$contentId]);
-        }
-    }
-
-    /**
-     * @param string $contentTypeId
-     */
-    public function addUseInContentType($contentTypeId)
-    {
-        if (is_string($contentTypeId)) {
-            $this->useReferences[self::KEY_CONTENT_TYPE][$contentTypeId] = $contentTypeId;
-        }
-    }
-
-    /**
-     * @param string $contentTypeId
-     */
-    public function removeUseInContentType($contentTypeId)
-    {
-        if (is_string($contentTypeId)) {
-            unset($this->useReferences[self::KEY_CONTENT_TYPE][$contentTypeId]);
-        }
-    }
-
-    /**
-     * @param string $mediaId
-     */
-    public function addUseInMedia($mediaId)
-    {
-        if (is_string($mediaId)) {
-            $this->useReferences[self::KEY_MEDIA][$mediaId] = $mediaId;
-        }
-    }
-
-    /**
-     * @param string $mediaId
-     */
-    public function removeUseInMedia($mediaId)
-    {
-        if (is_string($mediaId)) {
-            unset($this->useReferences[self::KEY_MEDIA][$mediaId]);
+        if (is_string($entityId) && is_string($entityType)) {
+            unset($this->useReferences[$entityType][$entityId]);
         }
     }
 
