@@ -6,14 +6,10 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use Doctrine\MongoDB\Database;
 
-@trigger_error('The '.__NAMESPACE__.'\EmbedKeyword class is deprecated since version 1.2.0 and will be removed in 2.0, use MultiLanguagesFilterStrategy', E_USER_DEPRECATED);
-
 /**
- * Class TranslatedFilterStrategy
- *
- * @deprecated will be removed in 2.0, use MultiLanguagesFilterStrategy
+ * Class MultiLanguagesFilterStrategy
  */
-class TranslatedFilterStrategy implements FilterTypeInterface
+class MultiLanguagesFilterStrategy implements FilterTypeInterface
 {
     protected $documentManager;
 
@@ -32,7 +28,7 @@ class TranslatedFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'translatedValue';
+        return $type === 'multiLanguages';
     }
 
     /**
@@ -47,7 +43,7 @@ class TranslatedFilterStrategy implements FilterTypeInterface
         $collection = $this->documentManager->getDocumentCollection($documentName);
         $collectionName = $collection->getName();
         $dataBase = $this->documentManager->getDocumentDatabase($documentName);
-        $key = $name.'.*.value';
+        $key = $name.'.*';
         $value = new \MongoRegex('/.*'.$value.'.*/i');
         $filter = $this->generateCriteria($key, $value, $collectionName, $dataBase);
 
@@ -72,15 +68,14 @@ class TranslatedFilterStrategy implements FilterTypeInterface
         $map = new \MongoCode(
             "function() {
                     for (var key in eval('this.' + preColumn)) {
-                        emit(preColumn + '.' + key + '.' + postColumn, null);
+                        emit(preColumn + '.' + key, null);
                     }
             }"
         );
         $reduce = new \MongoCode("function(k, vals) {  return null; }");
 
-        preg_match('/(.*)\.\*.(.*)/',$key, $column);
+        preg_match('/(.*)\.\*/',$key, $column);
         $preColumnn = $column[1];
-        $postColumn = $column[2];
 
         $commandResult = $dataBase->command(array(
             "mapreduce" => $collectionName,
@@ -88,8 +83,7 @@ class TranslatedFilterStrategy implements FilterTypeInterface
             "reduce" => $reduce,
             "out" => array("inline" => 1),
             "scope" => array(
-                "preColumn" => "$preColumnn",
-                "postColumn" => "$postColumn"
+                "preColumn" => "$preColumnn"
             )
         ));
 
@@ -108,6 +102,6 @@ class TranslatedFilterStrategy implements FilterTypeInterface
      */
     public function getName()
     {
-        return 'translated_filter';
+        return 'multi_languages_filter';
     }
 }
