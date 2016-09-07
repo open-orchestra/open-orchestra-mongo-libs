@@ -35,11 +35,23 @@ trait UseTrackable
     }
 
     /**
+     * @param string|null $entityType
+     *
      * @return array
      */
-    public function getUseReferences()
+    public function getUseReferences($entityType = null)
     {
-        return $this->useReferences;
+        if (is_null($entityType)) {
+
+            return $this->useReferences;
+        }
+
+        if (isset($this->useReferences[$entityType])) {
+
+            return $this->useReferences[$entityType];
+        }
+
+        return array();
     }
 
     /**
