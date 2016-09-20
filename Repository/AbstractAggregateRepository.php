@@ -85,8 +85,15 @@ abstract class AbstractAggregateRepository extends DocumentRepository
      */
     protected function singleHydrateAggregateQuery(Stage $qa)
     {
-        $aggregateCollection = $this->hydrateAggregateQuery($qa);
+        $contents = $qa->getQuery()->aggregate();
 
-        return (null !== $aggregateCollection && isset($aggregateCollection[0])) ? $aggregateCollection[0] : null;
+        $firstContent = $contents->getSingleResult();
+
+        return null !== $firstContent
+            ? $this->getDocumentManager()->getUnitOfWork()->getOrCreateDocument(
+                $this->getClassName(),
+                $firstContent
+                )
+            : null;
     }
 }
