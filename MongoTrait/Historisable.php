@@ -30,7 +30,7 @@ trait Historisable
     /**
      * Initialize histories
      */
-    protected function initializeHistory()
+    protected function initializeHistories()
     {
         $this->histories = new ArrayCollection();
     }
