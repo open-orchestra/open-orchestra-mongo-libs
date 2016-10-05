@@ -31,10 +31,10 @@ trait FilterTrait
      *
      * @return Stage
      */
-    protected function generateFilter(Stage $qa, FinderConfiguration $configuration)
+    protected function generateFilter(Stage $qa, FinderConfiguration $configuration, $all = true)
     {
         if (null !== $configuration->getSearch()) {
-            $filterSearch = $this->generateSearchFilter($configuration);
+            $filterSearch = $this->generateSearchFilter($configuration, $all);
             if (null !== $filterSearch) {
                 $qa->match($filterSearch);
             }
@@ -48,12 +48,15 @@ trait FilterTrait
      *
      * @return array|null
      */
-    protected function generateSearchFilter(FinderConfiguration $configuration)
+    protected function generateSearchFilter(FinderConfiguration $configuration, $all)
     {
         $filter = null;
         $descriptionEntity = $configuration->getDescriptionEntity();
 
-        $filtersColumn = $this->getFilterSearchColumn($configuration->getSearchIndex('columns'), $descriptionEntity);
+        $filtersColumn = $this->getFilterSearchColumn($configuration->getSearchIndex('filters'), $descriptionEntity);
+        if ($all) {
+            $filtersColumn = array_merge($filtersColumn, $this->getFilterSearchColumn($configuration->getSearchIndex('columns'), $descriptionEntity));
+        }
         $filtersAll = $this->getFilterSearchGlobal($configuration->getSearchIndex('global'), $descriptionEntity);
         if (!empty($filtersAll) || !empty($filtersColumn)) {
             $filter = array('$and' => $filtersColumn);
