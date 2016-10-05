@@ -29,9 +29,10 @@ trait PaginationTrait
     /**
      * @return int
      */
-    public function count()
+    public function count(FinderConfiguration $configuration)
     {
         $qa = $this->createAggregationQuery();
+        $qa = $this->generateFilter($qa, $configuration, false);
 
         return $this->countDocumentAggregateQuery($qa);
     }
