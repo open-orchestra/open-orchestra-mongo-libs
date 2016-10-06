@@ -27,11 +27,16 @@ trait PaginationTrait
     }
 
     /**
+     * @param FinderConfiguration|null $configuration
+     *
      * @return int
      */
-    public function count()
+    public function count(FinderConfiguration $configuration = null)
     {
         $qa = $this->createAggregationQuery();
+        if (!is_null($configuration)) {
+            $qa = $this->generatePreFilter($qa, $configuration);
+        }
 
         return $this->countDocumentAggregateQuery($qa);
     }

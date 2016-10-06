@@ -44,6 +44,24 @@ trait FilterTrait
     }
 
     /**
+     * @param Stage               $qa
+     * @param FinderConfiguration $configuration
+     *
+     * @return Stage
+     */
+    protected function generatePreFilter(Stage $qa, FinderConfiguration $configuration)
+    {
+        if (null !== $configuration->getSearch()) {
+            $filterSearch = $this->generatePreSearchFilter($configuration);
+            if (null !== $filterSearch) {
+                $qa->match($filterSearch);
+            }
+        }
+
+        return $qa;
+    }
+
+    /**
      * @param FinderConfiguration $configuration
      *
      * @return array|null
@@ -53,7 +71,10 @@ trait FilterTrait
         $filter = null;
         $descriptionEntity = $configuration->getDescriptionEntity();
 
-        $filtersColumn = $this->getFilterSearchColumn($configuration->getSearchIndex('columns'), $descriptionEntity);
+        $filtersColumn = array_merge(
+            $this->getFilterSearchColumn($configuration->getSearchIndex('prefilters'), $descriptionEntity),
+            $this->getFilterSearchColumn($configuration->getSearchIndex('columns'), $descriptionEntity)
+        );
         $filtersAll = $this->getFilterSearchGlobal($configuration->getSearchIndex('global'), $descriptionEntity);
         if (!empty($filtersAll) || !empty($filtersColumn)) {
             $filter = array('$and' => $filtersColumn);
@@ -65,6 +86,24 @@ trait FilterTrait
                     array('$or' => $filtersAll),
                 ));
             }
+        }
+
+        return $filter;
+    }
+
+    /**
+     * @param FinderConfiguration $configuration
+     *
+     * @return array|null
+     */
+    protected function generatePreSearchFilter(FinderConfiguration $configuration)
+    {
+        $filter = null;
+        $descriptionEntity = $configuration->getDescriptionEntity();
+
+        $filtersColumn = $this->getFilterSearchColumn($configuration->getSearchIndex('prefilters'), $descriptionEntity);
+        if (!empty($filtersColumn)) {
+            $filter = array('$and' => $filtersColumn);
         }
 
         return $filter;
