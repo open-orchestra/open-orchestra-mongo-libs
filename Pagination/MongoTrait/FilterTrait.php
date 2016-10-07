@@ -189,15 +189,18 @@ trait FilterTrait
         $sorts = $this->generateArrayForFilterSort(
             $configuration->getOrder(),
             $configuration->getDescriptionEntity(),
-            false
+            false,
+            true
         );
 
         foreach ($sorts as $key => $name) {
             $group = array_merge($group, array(
                 $key => array(
-                    '$last' => '$'.str_replace('.', '_', $name)
+                    '$last' => '$'.$name
                 )));
         }
+
+
 
         return $group;
     }
@@ -206,10 +209,11 @@ trait FilterTrait
      * @param array|null $order
      * @param array|null $descriptionEntity
      * @param boolean    $returnOrder
+     * @param boolean    $sortForGroup
      *
      * @return array
      */
-    protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true)
+    protected function generateArrayForFilterSort($order = null , $descriptionEntity = null, $returnOrder = true, $sortForGroup = false)
     {
         if (null !== $order && !empty($order)) {
             $columnsName = $order['name'];
@@ -218,6 +222,10 @@ trait FilterTrait
                 $value = $key;
                 if ($returnOrder) {
                     $value = ($order['dir'] == 'desc') ? -1 : 1;
+                }
+
+                if ($sortForGroup) {
+                    $key = str_replace('.', '_', $key);
                 }
 
                 return array($key => $value);
@@ -231,12 +239,13 @@ trait FilterTrait
      * @param Stage      $qa
      * @param array|null $order
      * @param array|null $descriptionEntity
+     * @param boolean    $sortForGroup
      *
      * @return Stage
      */
-    protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null)
+    protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null, $sortForGroup = false)
     {
-        $sortArgs = $this->generateArrayForFilterSort($order, $descriptionEntity);
+        $sortArgs = $this->generateArrayForFilterSort($order, $descriptionEntity, true, $sortForGroup);
         if (!empty($sortArgs)) {
             $qa->sort($sortArgs);
         }
