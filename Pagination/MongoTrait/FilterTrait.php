@@ -191,10 +191,11 @@ trait FilterTrait
             $configuration->getDescriptionEntity(),
             false
         );
+
         foreach ($sorts as $key => $name) {
             $group = array_merge($group, array(
                 $key => array(
-                    '$last' => '$'.$name
+                    '$last' => '$'.str_replace('.', '_', $name)
                 )));
         }
 
@@ -219,7 +220,7 @@ trait FilterTrait
                     $value = ($order['dir'] == 'desc') ? -1 : 1;
                 }
 
-                return array(str_replace('.', '_', $key) => $value);
+                return array($key => $value);
             }
         }
 
