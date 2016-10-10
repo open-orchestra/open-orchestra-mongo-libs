@@ -4,6 +4,7 @@ namespace OpenOrchestra\MongoTrait;
 
 use OpenOrchestra\ModelBundle\Document\EmbedStatus;
 use OpenOrchestra\ModelInterface\Model\StatusInterface;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * Trait Statusable

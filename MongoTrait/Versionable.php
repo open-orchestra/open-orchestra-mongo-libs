@@ -2,6 +2,8 @@
 
 namespace OpenOrchestra\MongoTrait;
 
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+
 /**
  * Trait Versionable
  */
