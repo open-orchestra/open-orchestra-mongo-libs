@@ -4,6 +4,7 @@ namespace OpenOrchestra\MongoTrait;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use OpenOrchestra\ModelInterface\Model\HistoryInterface;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * Trait Historisable

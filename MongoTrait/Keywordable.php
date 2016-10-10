@@ -3,6 +3,7 @@
 namespace OpenOrchestra\MongoTrait;
 
 use OpenOrchestra\ModelInterface\Model\KeywordInterface;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * Trait Keywordable

@@ -25,7 +25,6 @@ class OpenOrchestraMongoExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('metadata_search_reader.yml');
         $loader->load('filter_strategy.yml');
-        $loader->load('transformer.yml');
 
         //cache metadata
         $cacheDirectory = $config['search_metadata']['cache_dir'];
