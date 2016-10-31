@@ -35,7 +35,7 @@ trait UseTrackable
             unset($this->useReferences[$entityType][$entityId]);
         }
 
-        if(empty($this->useReferences[$entityType])) {
+        if (empty($this->useReferences[$entityType])) {
             unset($this->useReferences[$entityType]);
         }
     }
