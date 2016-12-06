@@ -14,7 +14,7 @@ abstract class AbstractAggregateRepository extends DocumentRepository
     /**
      * @var AggregationQueryBuilder
      */
-    private $aggregationQueryBuilder;
+    protected $aggregationQueryBuilder;
 
     /**
      * @param AggregationQueryBuilder $aggregationQueryBuilder
