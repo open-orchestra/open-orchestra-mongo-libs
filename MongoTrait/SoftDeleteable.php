@@ -13,7 +13,6 @@ trait SoftDeleteable
      * @var boolean
      *
      * @ODM\Field(type="boolean")
-     * @ORCHESTRA\Search(key="deleted", type="boolean")
      */
     protected $deleted = false;
 

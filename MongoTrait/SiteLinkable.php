@@ -11,7 +11,6 @@ trait SiteLinkable
 {
     /**
      * @ODM\Field(type="boolean")
-     * @ORCHESTRA\Search(key="linked_to_site", type="boolean")
      */
     protected $linkedToSite = false;
 
