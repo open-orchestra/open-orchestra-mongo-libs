@@ -32,7 +32,7 @@ trait FilterTrait
      *
      * @return Stage
      */
-    protected function generateFieldFilter(PaginateFinderConfiguration $configuration, Stage $qa, array $searchTypes, $format='')
+    protected function generateFieldsFilter(PaginateFinderConfiguration $configuration, Stage $qa, array $searchTypes, $format='')
     {
         foreach($searchTypes as $name => $type) {
             $qa = $this->generateFilter($configuration, $qa, $type, $name, $name.'.string_value', $format);
