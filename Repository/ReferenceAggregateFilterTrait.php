@@ -2,8 +2,6 @@
 
 namespace OpenOrchestra\Repository;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
-
 /**
  * Trait ReferenceAggregateFilterTrait
  */
