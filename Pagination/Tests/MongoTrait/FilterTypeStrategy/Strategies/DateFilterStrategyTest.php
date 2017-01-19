@@ -4,6 +4,7 @@ namespace OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategie
 
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\DateFilterStrategy;
 use MongoDate;
+use Phake;
 
 /**
  * Class DateFilterStrategyTest
@@ -20,7 +21,7 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
         $context = Phake::mock('OpenOrchestra\Backoffice\Context\ContextManager');
         Phake::when($context)->getDefaultLocale()->thenReturn('en');
 
-        $this->strategy = new DateFilterStrategy();
+        $this->strategy = new DateFilterStrategy($context);
     }
 
     /**
@@ -53,14 +54,20 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
     /**
      * @param string  $value
      * @param string  $filterValue
+     * @param string  $language
      *
      * @dataProvider provideGenerateFilter
      */
-    public function testGenerateFilter($value, $filterValue)
+    public function testGenerateFilter($value, $filterValue, $language)
     {
+        $context = Phake::mock('OpenOrchestra\Backoffice\Context\ContextManager');
+        Phake::when($context)->getDefaultLocale()->thenReturn($language);
+
+        $strategy = new DateFilterStrategy($context);
+
         $name = 'fakeName';
         $filterValue = new MongoDate(strtotime($filterValue));
-        $filter = $this->strategy->generateFilter($name, $value, 'fakeDocumentName');
+        $filter = $strategy->generateFilter($name, $value, 'fakeDocumentName');
         $this->assertSame($filter[$name]->sec, $filterValue->sec);
         $this->assertSame($filter[$name]->usec, $filterValue->usec);
     }
@@ -71,8 +78,8 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
     public function provideGenerateFilter()
     {
         return array(
-            array("19/10/2015 16:23:12", "19-10-2015 16:23:12"),
-            array("2015-10-21 16:23:12", "2015-10-21 16:23:12"),
+            array("19/10/2015 16:23:12", "19-10-2015 16:23:12", "fr"),
+            array("10/19/2015 16:23:12", "2015-10-19 16:23:12", "en"),
         );
     }
 
