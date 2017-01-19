@@ -4,12 +4,25 @@ namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use MongoDate;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class DateFilterStrategy
  */
 class DateFilterStrategy implements FilterTypeInterface
 {
+
+    protected $contextManager;
+
+    /**
+     * @param CurrentSiteIdInterface $contextManager
+     */
+    public function __construct(
+        CurrentSiteIdInterface $contextManager
+    ) {
+        $this->contextManager = $contextManager;
+    }
+
     /**
      * @param string $type
      *
@@ -29,7 +42,11 @@ class DateFilterStrategy implements FilterTypeInterface
      */
     public function generateFilter($name, $value, $documentName)
     {
-        $value = str_replace("/", "-", trim($value));
+        if ($this->contextManager->getDefaultLocale() == 'en') {
+            $value = preg_replace('/(\d+)\/(\d+)\/(\d+)(.*)/', '$3-$1-$2$4', $value);
+        } else {
+            $value = preg_replace('/(\d+)\/(\d+)\/(\d+)(.*)/', '$3-$2-$1$4', $value);
+        }
         $strTime = strtotime($value);
         if ("00:00:00" ==  date('H:i:s', $strTime)) {
             $dateGte = new MongoDate($strTime);
