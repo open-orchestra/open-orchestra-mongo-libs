@@ -37,15 +37,25 @@ class DateFilterStrategy implements FilterTypeInterface
      * @param string $name
      * @param string $value
      * @param string $documentName
+     * @param string $format
      *
      * @return array
      */
-    public function generateFilter($name, $value, $documentName)
+    public function generateFilter($name, $value, $documentName='', $format='')
     {
-        if ($this->contextManager->getDefaultLocale() == 'en') {
-            $value = preg_replace('/(\d+)\/(\d+)\/(\d+)(.*)/', '$3-$1-$2$4', $value);
-        } else {
-            $value = preg_replace('/(\d+)\/(\d+)\/(\d+)(.*)/', '$3-$2-$1$4', $value);
+        if ($format != '') {
+            $pattern = '/^'.preg_replace(array('/dd/', '/mm/', '/yyyy/', '/yy/'), '(\d+)', preg_quote($format, '/')).'(.*)$/';
+
+            $positionDay = strpos ($format, 'dd');
+            $positionMonth = strpos ($format, 'mm');
+            $positionYear = strpos ($format, 'yy');
+            $rankDay = 1 + (int) ($positionDay > $positionMonth) + (int) ($positionDay > $positionYear);
+            $rankMonth = 1 + (int) ($positionMonth > $positionDay) + (int) ($positionMonth > $positionYear);
+            $rankYear = 1 + (int) ($positionYear > $positionDay) + (int) ($positionYear > $positionMonth);
+
+            $replacement = '$'.$rankYear.'-$'.$rankMonth.'-$'.$rankDay.'$4';
+
+            $value = preg_replace($pattern, $replacement, $value);
         }
         $strTime = strtotime($value);
         if ("00:00:00" ==  date('H:i:s', $strTime)) {

@@ -28,13 +28,14 @@ trait FilterTrait
      * @param PaginateFinderConfiguration $configuration
      * @param Stage                       $qa
      * @param array                       $searchTypes
+     * @param string                      $format
      *
      * @return Stage
      */
-    protected function generateFieldFilter(PaginateFinderConfiguration $configuration, Stage $qa, array $searchTypes)
+    protected function generateFieldFilter(PaginateFinderConfiguration $configuration, Stage $qa, array $searchTypes, $format='')
     {
         foreach($searchTypes as $name => $type) {
-            $qa = $this->generateFilter($configuration, $qa, $type, $name, $name.'.value');
+            $qa = $this->generateFilter($configuration, $qa, $type, $name, $name.'.string_value', $format);
         }
 
         return $qa;
@@ -46,14 +47,15 @@ trait FilterTrait
      * @param string                      $type
      * @param string                      $value
      * @param string                      $name
+     * @param string                      $format
      *
      * @return Stage
      */
-    protected function generateFilter(PaginateFinderConfiguration $configuration, Stage $qa, $type, $value, $name)
+    protected function generateFilter(PaginateFinderConfiguration $configuration, Stage $qa, $type, $value, $name, $format='')
     {
         $value = $configuration->getSearchIndex($value);
         if (null !== $value && $value !== '') {
-            $filter = $this->filterTypeManager->generateFilter($type, $name, $value, '');
+            $filter = $this->filterTypeManager->generateFilter($type, $name, $value, '', $format);
             if (!empty($filter)) {
                 $qa->match($filter);
             }
