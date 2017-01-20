@@ -17,7 +17,7 @@ class StringFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'string';
+        return $type === 'text';
     }
 
     /**

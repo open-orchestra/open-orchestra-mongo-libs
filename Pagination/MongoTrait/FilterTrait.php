@@ -35,7 +35,7 @@ trait FilterTrait
     protected function generateFieldsFilter(PaginateFinderConfiguration $configuration, Stage $qa, array $searchTypes, $format='')
     {
         foreach($searchTypes as $name => $type) {
-            $qa = $this->generateFilter($configuration, $qa, $type, $name, $name.'.string_value', $format);
+            $qa = $this->generateFilter($configuration, $qa, $type, $name, $name.'.stringValue', $format);
         }
 
         return $qa;
@@ -53,6 +53,7 @@ trait FilterTrait
      */
     protected function generateFilter(PaginateFinderConfiguration $configuration, Stage $qa, $type, $value, $name, $format='')
     {
+
         $value = $configuration->getSearchIndex($value);
         if (null !== $value && $value !== '') {
             $filter = $this->filterTypeManager->generateFilter($type, $name, $value, '', $format);
