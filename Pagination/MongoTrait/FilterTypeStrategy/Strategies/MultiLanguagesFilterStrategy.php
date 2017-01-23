@@ -11,6 +11,8 @@ use Doctrine\MongoDB\Database;
  */
 class MultiLanguagesFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'multiLanguages';
+
     protected $documentManager;
 
     /**
@@ -28,7 +30,7 @@ class MultiLanguagesFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'multiLanguages';
+        return $type === self::FILTER_TYPE;
     }
 
     /**

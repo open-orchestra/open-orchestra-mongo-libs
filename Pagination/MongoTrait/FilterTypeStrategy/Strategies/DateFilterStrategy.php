@@ -11,6 +11,7 @@ use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
  */
 class DateFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'date';
 
     protected $contextManager;
 
@@ -30,7 +31,7 @@ class DateFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'date';
+        return $type === self::FILTER_TYPE;
     }
 
     /**

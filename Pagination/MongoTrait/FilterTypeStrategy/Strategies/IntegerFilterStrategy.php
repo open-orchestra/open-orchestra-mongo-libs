@@ -9,6 +9,8 @@ use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
  */
 class IntegerFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'integer';
+
     /**
      * @param string $type
      *
@@ -16,7 +18,7 @@ class IntegerFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'integer';
+        return $type === self::FILTER_TYPE;
     }
 
     /**

@@ -10,6 +10,8 @@ use MongoRegex;
  */
 class StringFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'text';
+
     /**
      * @param string $type
      *
@@ -17,7 +19,7 @@ class StringFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'text';
+        return $type === self::FILTER_TYPE;
     }
 
     /**

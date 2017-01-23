@@ -16,6 +16,8 @@ use OpenOrchestra\Repository\AbstractAggregateRepository;
  */
 class ReferenceFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'reference';
+
     protected $documentManager;
     protected $searchMappingReader;
     protected $aggregationQueryBuilder;
@@ -47,7 +49,7 @@ class ReferenceFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'reference';
+        return $type === self::FILTER_TYPE;
     }
 
     /**
