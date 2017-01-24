@@ -55,16 +55,13 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
      *
      * @dataProvider provideGenerateFilter
      */
-    public function testGenerateFilter($value, $filterValue, $language)
+    public function testGenerateFilter($value, $filterValue, $format)
     {
-        $context = Phake::mock('OpenOrchestra\Backoffice\Context\ContextManager');
-        Phake::when($context)->getDefaultLocale()->thenReturn($language);
-
-        $strategy = new DateFilterStrategy($context);
+        $strategy = new DateFilterStrategy();
 
         $name = 'fakeName';
         $filterValue = new MongoDate(strtotime($filterValue));
-        $filter = $strategy->generateFilter($name, $value, 'fakeDocumentName');
+        $filter = $strategy->generateFilter($name, $value, 'fakeDocumentName', $format);
         $this->assertSame($filter[$name]->sec, $filterValue->sec);
         $this->assertSame($filter[$name]->usec, $filterValue->usec);
     }
@@ -75,8 +72,8 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
     public function provideGenerateFilter()
     {
         return array(
-            array("19/10/2015 16:23:12", "19-10-2015 16:23:12", "fr"),
-            array("10/19/2015 16:23:12", "2015-10-19 16:23:12", "en"),
+            array("19/10/2015 16:23:12", "19-10-2015 16:23:12", "dd/mm/yy"),
+            array("10/19/2015 16:23:12", "2015-10-19 16:23:12", "mm/dd/yy"),
         );
     }
 
