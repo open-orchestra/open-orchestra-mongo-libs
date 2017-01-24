@@ -18,10 +18,7 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
 
     public function setUp()
     {
-        $context = Phake::mock('OpenOrchestra\Backoffice\Context\ContextManager');
-        Phake::when($context)->getDefaultLocale()->thenReturn('en');
-
-        $this->strategy = new DateFilterStrategy($context);
+        $this->strategy = new DateFilterStrategy();
     }
 
     /**

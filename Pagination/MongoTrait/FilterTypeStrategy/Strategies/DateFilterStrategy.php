@@ -13,17 +13,6 @@ class DateFilterStrategy implements FilterTypeInterface
 {
     const FILTER_TYPE =  'date';
 
-    protected $contextManager;
-
-    /**
-     * @param CurrentSiteIdInterface $contextManager
-     */
-    public function __construct(
-        CurrentSiteIdInterface $contextManager
-    ) {
-        $this->contextManager = $contextManager;
-    }
-
     /**
      * @param string $type
      *
