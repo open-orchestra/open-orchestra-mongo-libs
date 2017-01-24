@@ -41,7 +41,7 @@ class StringTestFilterStrategy extends AbstractTestFilterStrategy
     {
         return array(
             array('boolean', false),
-            array('string', true),
+            array('text', true),
             array('integer', false),
             array('', false),
             array(null, false),

@@ -10,6 +10,8 @@ use MongoRegex;
  */
 class StringFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'text';
+
     /**
      * @param string $type
      *
@@ -17,17 +19,18 @@ class StringFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'string';
+        return $type === self::FILTER_TYPE;
     }
 
     /**
      * @param string $name
      * @param string $value
      * @param string $documentName
+     * @param string $format
      *
      * @return array
      */
-    public function generateFilter($name, $value, $documentName)
+    public function generateFilter($name, $value, $documentName='', $format='')
     {
         $value = preg_quote($value);
         $filter = array($name => new MongoRegex('/.*'.$value.'.*/i'));

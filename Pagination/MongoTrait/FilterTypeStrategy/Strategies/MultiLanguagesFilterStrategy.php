@@ -11,6 +11,8 @@ use Doctrine\MongoDB\Database;
  */
 class MultiLanguagesFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'multiLanguages';
+
     protected $documentManager;
 
     /**
@@ -28,17 +30,18 @@ class MultiLanguagesFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'multiLanguages';
+        return $type === self::FILTER_TYPE;
     }
 
     /**
      * @param string $name
      * @param string $value
      * @param string $documentName
+     * @param string $format
      *
      * @return array
      */
-    public function generateFilter($name, $value, $documentName)
+    public function generateFilter($name, $value, $documentName='', $format='')
     {
         $collection = $this->documentManager->getDocumentCollection($documentName);
         $collectionName = $collection->getName();

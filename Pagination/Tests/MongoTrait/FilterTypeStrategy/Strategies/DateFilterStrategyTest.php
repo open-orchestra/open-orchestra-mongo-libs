@@ -4,6 +4,7 @@ namespace OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategie
 
 use OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\DateFilterStrategy;
 use MongoDate;
+use Phake;
 
 /**
  * Class DateFilterStrategyTest
@@ -50,14 +51,17 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
     /**
      * @param string  $value
      * @param string  $filterValue
+     * @param string  $language
      *
      * @dataProvider provideGenerateFilter
      */
-    public function testGenerateFilter($value, $filterValue)
+    public function testGenerateFilter($value, $filterValue, $format)
     {
+        $strategy = new DateFilterStrategy();
+
         $name = 'fakeName';
         $filterValue = new MongoDate(strtotime($filterValue));
-        $filter = $this->strategy->generateFilter($name, $value, 'fakeDocumentName');
+        $filter = $strategy->generateFilter($name, $value, 'fakeDocumentName', $format);
         $this->assertSame($filter[$name]->sec, $filterValue->sec);
         $this->assertSame($filter[$name]->usec, $filterValue->usec);
     }
@@ -68,8 +72,8 @@ class DateTestFilterStrategy extends AbstractTestFilterStrategy
     public function provideGenerateFilter()
     {
         return array(
-            array("19/10/2015 16:23:12", "19-10-2015 16:23:12"),
-            array("2015-10-21 16:23:12", "2015-10-21 16:23:12"),
+            array("19/10/2015 16:23:12", "19-10-2015 16:23:12", "dd/mm/yy"),
+            array("10/19/2015 16:23:12", "2015-10-19 16:23:12", "mm/dd/yy"),
         );
     }
 

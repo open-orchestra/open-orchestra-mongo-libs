@@ -9,6 +9,8 @@ use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
  */
 class BooleanFilterStrategy implements FilterTypeInterface
 {
+    const FILTER_TYPE =  'boolean';
+
     /**
      * @param string $type
      *
@@ -16,17 +18,18 @@ class BooleanFilterStrategy implements FilterTypeInterface
      */
     public function support($type)
     {
-        return $type === 'boolean';
+        return $type === self::FILTER_TYPE;
     }
 
     /**
      * @param string $name
      * @param string $value
      * @param string $documentName
+     * @param string $format
      *
      * @return array
      */
-    public function generateFilter($name, $value, $documentName)
+    public function generateFilter($name, $value, $documentName='', $format='')
     {
         if ($value === 'true' || $value === '1') {
             return array($name => true);

@@ -45,7 +45,5 @@ services:
 
     open_orchestra_pagination.filter_type.date_filter:
         class: '%open_orchestra_pagination.filter_type.date_filter.class%'
-        arguments:
-            - '@doctrine.odm.mongodb.document_manager'
         tags:
             - { name: open_orchestra_pagination.filter_type.strategy }
