@@ -57,9 +57,9 @@ trait UseTrackable
     }
 
     /**
-     * @return boolean
+     * @return int
      */
-    public function isUsed()
+    public function countUse()
     {
         $countReferences = 0;
 
@@ -69,6 +69,14 @@ trait UseTrackable
             }
         }
 
-        return 0 < $countReferences;
+        return $countReferences;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isUsed()
+    {
+        return 0 < $this->countUse();
     }
 }
