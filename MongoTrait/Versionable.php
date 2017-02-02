@@ -17,6 +17,13 @@ trait Versionable
     protected $version = 1;
 
     /**
+     * @var int $version
+     *
+     * @ODM\Field(type="string")
+     */
+    protected $versionName;
+
+    /**
      * @param int $version
      */
     public function setVersion($version)
@@ -30,5 +37,21 @@ trait Versionable
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * @param string $versionName
+     */
+    public function setVersionName($versionName)
+    {
+        $this->versionName = $versionName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersionName()
+    {
+        return $this->versionName;
     }
 }
