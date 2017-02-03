@@ -4,7 +4,6 @@ namespace OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies;
 
 use OpenOrchestra\Pagination\FilterType\FilterTypeInterface;
 use MongoDate;
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class DateFilterStrategy
