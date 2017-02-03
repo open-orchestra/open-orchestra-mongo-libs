@@ -24,13 +24,6 @@ trait Statusable
     protected $statusChanged = false;
 
     /**
-     * @var bool
-     *
-     * @ODM\Field(type="boolean")
-     */
-    protected $currentlyPublished = false;
-
-    /**
      * Set status
      *
      * @param StatusInterface|null $status
@@ -60,21 +53,5 @@ trait Statusable
     public function hasStatusChanged()
     {
         return $this->statusChanged;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCurrentlyPublished()
-    {
-        return $this->currentlyPublished;
-    }
-
-    /**
-     * @param bool $currentlyPublished
-     */
-    public function setCurrentlyPublished($currentlyPublished)
-    {
-        $this->currentlyPublished = $currentlyPublished;
     }
 }
