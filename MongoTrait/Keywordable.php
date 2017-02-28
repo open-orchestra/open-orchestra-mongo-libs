@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\MongoTrait;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use OpenOrchestra\ModelInterface\Model\KeywordInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
@@ -39,5 +40,13 @@ trait Keywordable
     public function removeKeyword(KeywordInterface $keyword)
     {
         $this->keywords->removeElement($keyword);
+    }
+
+    /**
+     * Initialize keywords
+     */
+    public function initializeKeywords()
+    {
+        $this->keywords = new ArrayCollection();
     }
 }
