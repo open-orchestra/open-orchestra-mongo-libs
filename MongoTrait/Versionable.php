@@ -12,9 +12,9 @@ trait Versionable
     /**
      * @var int $version
      *
-     * @ODM\Field(type="int")
+     * @ODM\Field(type="string")
      */
-    protected $version = 1;
+    protected $version;
 
     /**
      * @var int $version
@@ -24,7 +24,7 @@ trait Versionable
     protected $versionName;
 
     /**
-     * @param int $version
+     * @param string $version
      */
     public function setVersion($version)
     {
@@ -32,7 +32,7 @@ trait Versionable
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getVersion()
     {
