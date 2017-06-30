@@ -20,7 +20,8 @@
     "jms/metadata": "~1.5.1",
     "solution/mongo-odm-aggregation-bundle": "~0.1.1",
     "symfony/http-foundation": "~2.8.6",
-    "open-orchestra/open-orchestra-libs": "self.version"
+    "open-orchestra/open-orchestra-libs": "self.version",
+    "open-orchestra/open-orchestra-model-interface": "self.version"
   },
 
   "require-dev": {
