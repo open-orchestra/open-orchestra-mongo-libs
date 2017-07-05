@@ -12,7 +12,7 @@ trait SiteLinkable
     /**
      * @ODM\Field(type="boolean")
      */
-    protected $linkedToSite = false;
+    protected $linkedToSite = true;
 
     /**
      * @return boolean
